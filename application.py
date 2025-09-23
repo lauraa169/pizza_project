@@ -21,3 +21,25 @@ def setup():
     print("✅ Data inserted successfully.")
 
 setup()
+
+def slect():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    # Example: list all pizzas
+    cursor.execute("SELECT * FROM Pizza;")
+    rows = cursor.fetchall()  # fetch all results
+
+    print("✅ Pizzas in the database:")
+    for row in rows:
+        print(row)  # prints each row as a tuple
+
+    # Example: list all customers
+    cursor.execute("SELECT * FROM Customer;")
+    customers = cursor.fetchall()
+    print("\n✅ Customers in the database:")
+    for customer in customers:
+        print(customer)
+
+    conn.close()
+
+slect()
