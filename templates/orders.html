@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+  <a class="btn" href="{{ url_for('orders.new_order') }}">Create Order</a>
+  {% if orders %}
+  <table>
+    <thead><tr><th>ID</th><th>User</th><th>Items</th><th>Total</th><th>Created</th></tr></thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td>{{ o.id }}</td>
+        <td>{{ o.user.name }}</td>
+        <td>
+          {% if o.items %}
+            <ul>
+              {% for it in o.items %}
+                <li>{{ it.quantity }} × {{ it.product.name }} @ € {{ '%.2f'|format(it.unit_price) }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}—{% endif %}
+        </td>
+        <td>€ {{ '%.2f'|format(o.total) }}</td>
+        <td>{{ o.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No orders yet.</p>
+  {% endif %}
+{% endblock %}
