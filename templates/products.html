@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+  <a class="btn btn-primary" href="{{ url_for('products.new_product') }}">New Product</a>
+  {% if products %}
+  <table>
+    <thead><tr><th>ID</th><th>Name</th><th>Price</th></tr></thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>€ {{ '%.2f'|format(p.price) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No products yet.</p>
+  {% endif %}
+{% endblock %}
