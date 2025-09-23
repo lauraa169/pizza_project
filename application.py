@@ -20,30 +20,7 @@ cursor.executescript(data_sql)
 print("✅ Data inserted successfully.")
 
 # Step 4: test query
-cursor.execute('''SELECT 
-    o.Order_ID,
-    c.Customer_Name,
-    c.Customer_Surname,
-    s.Name AS Staff_FirstName,
-    s.Surname AS Staff_LastName,
-    p.Pizza_Name,
-    op.Quantity,
-    d.Drink_Name,
-    ds.Dessert_Name,
-    dis.Percent AS DiscountPercent,
-    o.Order_Price,
-    o.Delivered,
-    o.Order_Time
-FROM Order o
-JOIN Customer c ON o.Customer_ID = c.Customer_ID
-JOIN Staff s ON o.Delivery_Person = s.Staff_ID
-LEFT JOIN Order_Pizza op ON o.Order_ID = op.Order_ID
-LEFT JOIN Pizza p ON op.Pizza_ID = p.Pizza_ID
-LEFT JOIN Order_Extras oe ON o.Order_ID = oe.Order_ID
-LEFT JOIN Drink d ON oe.Drink_ID = d.Drink_ID
-LEFT JOIN Dessert ds ON oe.Dessert_ID = ds.Dessert_ID
-LEFT JOIN Discount dis ON o.Discount_Code = dis.Discount_Code
-ORDER BY o.Order_ID;''')
+cursor.execute('')
 rows = cursor.fetchall()
 
 print("\n📋 Customers in database:")
