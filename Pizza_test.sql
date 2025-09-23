@@ -1,8 +1,16 @@
-DROP DATABASE IF EXISTS pizza_system;
-CREATE DATABASE IF NOT EXISTS pizza_system;
-USE pizza_system;
+DROP TABLE IF EXISTS Discount;
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS `Order`;
+DROP TABLE IF EXISTS Drink;
+DROP TABLE IF EXISTS Dessert;
+DROP TABLE IF EXISTS Order_Extras;
+DROP TABLE IF EXISTS Ingredient;
+DROP TABLE IF EXISTS Pizza;
+DROP TABLE IF EXISTS Pizza_Ingredient;
+DROP TABLE IF EXISTS Order_Pizza;
 
-CREATE TABLE `Discount` (
+CREATE TABLE Discount (
   `Discount_Code` BIGINT,
   `Percent` BIGINT CHECK (`Percent` >= 0 AND `Percent` <= 100),
   `Redeemed` BOOLEAN NOT NULL,
