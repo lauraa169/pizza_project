@@ -20,9 +20,7 @@ def setup():
     cursor.executescript(data_sql)
     print("✅ Data inserted successfully.")
 
-setup()
-
-def select_query():
+def test_query():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     # Example: list all pizzas
@@ -42,4 +40,17 @@ def select_query():
 
     conn.close()
 
-select_query()
+def display_menu():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM Menu_Item;")
+    items = cursor.fetchall()
+    for item in items:
+        print(item)
+
+    conn.close()
+
+setup()
+display_menu()
+

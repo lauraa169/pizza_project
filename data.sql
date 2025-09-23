@@ -1,11 +1,15 @@
+-- ======================
 -- Discounts (10)
-INSERT INTO `Discount` (Discount_Code, Percent, Redeemed) VALUES
-(1001, 10, FALSE), (1002, 15, TRUE), (1003, 20, FALSE), (1004, 5, TRUE),
-(1005, 25, FALSE), (1006, 30, TRUE), (1007, 12, FALSE), (1008, 18, FALSE),
-(1009, 8, TRUE), (1010, 22, FALSE);
+-- ======================
+INSERT INTO Discount (Discount_Code, Percent, Redeemed) VALUES
+(1001,10,0),(1002,15,1),(1003,20,0),(1004,5,1),
+(1005,25,0),(1006,30,1),(1007,12,0),(1008,18,0),
+(1009,8,1),(1010,22,0);
 
+-- ======================
 -- Customers (10)
-INSERT INTO `Customer` (Customer_Name, Customer_Surname, Birth_Date, Customer_Address, Customer_Postal_Code, Credit_Card, Customer_Email, Phone_Number, Pizzas_Ordered) VALUES
+-- ======================
+INSERT INTO Customer (Customer_Name, Customer_Surname, Birth_Date, Customer_Address, Customer_Postal_Code, Credit_Card, Customer_Email, Phone_Number, Pizzas_Ordered) VALUES
 ('John','Doe','1990-05-15','123 Main St','10001',1234567890123456,'john@example.com',1112223333,5),
 ('Jane','Smith','1985-08-22','456 Park Ave','10002',9876543210987654,'jane@example.com',2223334444,3),
 ('Alice','Brown','2000-01-10','789 Broadway','10003',1111222233334444,'alice@example.com',3334445555,7),
@@ -17,73 +21,98 @@ INSERT INTO `Customer` (Customer_Name, Customer_Surname, Birth_Date, Customer_Ad
 ('Olivia','Taylor','1997-12-01','34 Maple Dr','10003',9999000011112222,'olivia@example.com',9990001111,3),
 ('Ethan','Harris','1989-04-09','56 Birch Blvd','10001',2222111133334444,'ethan@example.com',1011121314,9);
 
--- Staff (10, incl. delivery persons)
-INSERT INTO `Staff` (Name, Surname, Bank_Account, Liscence, Postal_Code, Availability) VALUES
-('Mark','Taylor','BA12345',1,'10001',TRUE),
-('Lucy','Green','BA67890',2,'10002',TRUE),
-('Paul','White','BA54321',3,'10003',TRUE),
-('Anna','King','BA98765',4,'10001',TRUE),
-('Tom','Evans','BA19283',5,'10002',FALSE),
-('Rachel','Scott','BA45678',6,'10003',TRUE),
-('James','Lee','BA22222',7,'10001',TRUE),
-('Maria','Hall','BA33333',8,'10002',TRUE),
-('David','Young','BA44444',9,'10003',TRUE),
-('Sophia','Clark','BA55555',10,'10001',TRUE);
+-- ======================
+-- Staff (10)
+-- ======================
+INSERT INTO Staff (Name, Surname, Bank_Account, Liscence, Postal_Code, Availability) VALUES
+('Mark','Taylor','BA12345',1,'10001',1),
+('Lucy','Green','BA67890',2,'10002',1),
+('Paul','White','BA54321',3,'10003',1),
+('Anna','King','BA98765',4,'10001',1),
+('Tom','Evans','BA19283',5,'10002',0),
+('Rachel','Scott','BA45678',6,'10003',1),
+('James','Lee','BA22222',7,'10001',1),
+('Maria','Hall','BA33333',8,'10002',1),
+('David','Young','BA44444',9,'10003',1),
+('Sophia','Clark','BA55555',10,'10001',1);
 
--- Orders (10)
-INSERT INTO `Order` (Customer_ID, Delivery_Person, Discount_Code, Order_Address, Order_Postal_Code, Order_Time, Order_Price, Delivered) VALUES
-(1,1,1001,'123 Main St','10001','2025-01-01 18:00:00',25,TRUE),
-(2,2,1002,'456 Park Ave','10002','2025-01-02 19:30:00',40,FALSE),
-(3,3,NULL,'789 Broadway','10003','2025-01-03 20:00:00',30,TRUE),
-(4,4,1004,'12 River Rd','10001','2025-01-04 18:45:00',22,TRUE),
-(5,5,1005,'45 Hill St','10002','2025-01-05 21:15:00',28,FALSE),
-(6,6,NULL,'78 Lake Ave','10003','2025-01-06 17:30:00',35,TRUE),
-(7,7,1007,'90 Oak Ln','10001','2025-01-07 20:20:00',42,TRUE),
-(8,8,1008,'22 Pine St','10002','2025-01-08 19:10:00',18,FALSE),
-(9,9,1009,'34 Maple Dr','10003','2025-01-09 18:40:00',50,TRUE),
-(10,10,1010,'56 Birch Blvd','10001','2025-01-10 21:00:00',60,TRUE);
+-- ======================
+-- Menu_Item (30 items: 10 pizzas, 10 drinks, 10 desserts)
+-- ======================
+-- Pizzas
+INSERT INTO Menu_Item (Item_Name, Item_Price) VALUES
+('Margherita',8.50),('Pepperoni',9.50),('Hawaiian',10.00),('BBQ Chicken',11.00),
+('Veggie Supreme',9.00),('Four Cheese',10.50),('Meat Feast',12.00),('Spicy Veggie',9.50),
+('Seafood Special',13.00),('Mushroom Delight',9.00);
 
--- Drinks (10)
-INSERT INTO `Drink` (Drink_Name, Drink_Price, `18+`) VALUES
-('Cola',2.50,FALSE),('Orange Juice',3.00,FALSE),('Lemonade',2.20,FALSE),
-('Iced Tea',2.80,FALSE),('Beer',4.00,TRUE),('Red Wine',5.50,TRUE),
-('Water',1.50,FALSE),('Energy Drink',3.50,FALSE),('Apple Juice',3.00,FALSE),
-('Whiskey',6.50,TRUE);
+-- Drinks
+INSERT INTO Menu_Item (Item_Name, Item_Price) VALUES
+('Cola',2.50),('Orange Juice',3.00),('Lemonade',2.20),('Iced Tea',2.80),
+('Beer',4.00),('Red Wine',5.50),('Water',1.50),('Energy Drink',3.50),
+('Apple Juice',3.00),('Whiskey',6.50);
 
--- Desserts (10)
-INSERT INTO `Dessert` (Dessert_Name, Dessert_Price) VALUES
+-- Desserts
+INSERT INTO Menu_Item (Item_Name, Item_Price) VALUES
 ('Ice Cream',3.50),('Cheesecake',4.00),('Brownie',3.00),('Tiramisu',4.50),
 ('Apple Pie',3.80),('Chocolate Cake',4.20),('Panna Cotta',3.90),('Donut',2.50),
 ('Fruit Salad',3.20),('Cupcake',2.80);
 
--- Order_Extras (10)
-INSERT INTO `Order_Extras` (Order_ID, Drink_ID, Dessert_ID, `+18`) VALUES
-(1,1,1,FALSE),(2,2,2,FALSE),(3,3,3,FALSE),(4,4,4,FALSE),
-(5,5,5,TRUE),(6,6,6,TRUE),(7,7,7,FALSE),(8,8,8,FALSE),
-(9,9,9,FALSE),(10,10,10,TRUE);
+-- ======================
+-- Drinks (reference Menu_Item)
+-- ======================
+INSERT INTO Drink (Drink_ID, Drink_Name, Drink_Price, "18+") VALUES
+(11,'Cola',2.50,0),(12,'Orange Juice',3.00,0),(13,'Lemonade',2.20,0),(14,'Iced Tea',2.80,0),
+(15,'Beer',4.00,1),(16,'Red Wine',5.50,1),(17,'Water',1.50,0),(18,'Energy Drink',3.50,0),
+(19,'Apple Juice',3.00,0),(20,'Whiskey',6.50,1);
 
+-- ======================
+-- Desserts (reference Menu_Item)
+-- ======================
+INSERT INTO Dessert (Dessert_ID, Dessert_Name, Dessert_Price) VALUES
+(21,'Ice Cream',3.50),(22,'Cheesecake',4.00),(23,'Brownie',3.00),(24,'Tiramisu',4.50),
+(25,'Apple Pie',3.80),(26,'Chocolate Cake',4.20),(27,'Panna Cotta',3.90),(28,'Donut',2.50),
+(29,'Fruit Salad',3.20),(30,'Cupcake',2.80);
+
+-- ======================
 -- Ingredients (10)
-INSERT INTO `Ingredient` (Ingredient_ID, Ingredient_Name, Price, Vegetarian_Ingredient, Vegan_Ingredient) VALUES
-(1,'Cheese',1.00,TRUE,FALSE),(2,'Tomato Sauce',0.50,TRUE,TRUE),
-(3,'Pepperoni',1.50,FALSE,FALSE),(4,'Ham',1.50,FALSE,FALSE),
-(5,'Chicken',1.80,FALSE,FALSE),(6,'Mushrooms',1.20,TRUE,TRUE),
-(7,'Onions',0.80,TRUE,TRUE),(8,'Bell Peppers',0.90,TRUE,TRUE),
-(9,'Olives',1.00,TRUE,TRUE),(10,'Shrimp',2.50,FALSE,FALSE);
+-- ======================
+INSERT INTO Ingredient (Ingredient_Name, Price, Vegetarian_Ingredient, Vegan_Ingredient) VALUES
+('Cheese',1.00,1,0),('Tomato Sauce',0.50,1,1),('Pepperoni',1.50,0,0),
+('Ham',1.50,0,0),('Chicken',1.80,0,0),('Mushrooms',1.20,1,1),
+('Onions',0.80,1,1),('Bell Peppers',0.90,1,1),('Olives',1.00,1,1),('Shrimp',2.50,0,0);
 
--- Pizzas (10)
-INSERT INTO `Pizza` (Pizza_Name, Vegetarian_Pizza, Vegan_Pizza, Size) VALUES
-('Margherita',TRUE,FALSE,TRUE),('Pepperoni',FALSE,FALSE,TRUE),
-('Hawaiian',FALSE,FALSE,TRUE),('BBQ Chicken',FALSE,FALSE,TRUE),
-('Veggie Supreme',TRUE,TRUE,TRUE),('Four Cheese',TRUE,FALSE,TRUE),
-('Meat Feast',FALSE,FALSE,TRUE),('Spicy Veggie',TRUE,TRUE,TRUE),
-('Seafood Special',FALSE,FALSE,TRUE),('Mushroom Delight',TRUE,TRUE,TRUE);
+-- ======================
+-- Pizzas (10, reference Menu_Item)
+-- ======================
+INSERT INTO Pizza (Pizza_ID, Pizza_Name, Vegetarian_Pizza, Vegan_Pizza, Size, Pizza_Price) VALUES
+(1,'Margherita',1,0,1,8.50),(2,'Pepperoni',0,0,1,9.50),(3,'Hawaiian',0,0,1,10.00),
+(4,'BBQ Chicken',0,0,1,11.00),(5,'Veggie Supreme',1,1,1,9.00),(6,'Four Cheese',1,0,1,10.50),
+(7,'Meat Feast',0,0,1,12.00),(8,'Spicy Veggie',1,1,1,9.50),(9,'Seafood Special',0,0,1,13.00),
+(10,'Mushroom Delight',1,1,1,9.00);
 
--- Pizza_Ingredient (at least 10)
-INSERT INTO `Pizza_Ingredient` (Pizza_ID, Ingredient_ID) VALUES
-(1,1),(1,2),(2,1),(2,2),(2,3),(3,1),(3,2),(3,4),(4,1),(4,2),
-(4,5),(5,2),(5,6),(5,7),(5,8),(6,1),(6,2),(6,6),(7,1),(7,2);
+-- ======================
+-- Pizza_Ingredient (10 sample)
+-- ======================
+INSERT INTO Pizza_Ingredient (Pizza_ID, Ingredient_ID) VALUES
+(1,1),(1,2),(2,1),(2,3),(3,1),(3,4),(4,1),(4,5),(5,2),(5,6);
 
--- Order_Pizza (10)
-INSERT INTO `Order_Pizza` (Order_ID, Pizza_ID, Quantity) VALUES
-(1,1,2),(1,2,1),(2,3,1),(2,4,2),(3,5,1),(4,6,2),(5,7,1),
-(6,8,2),(7,9,1),(10,10,3);
+-- ======================
+-- Orders (10)
+-- ======================
+INSERT INTO "Order" (Customer_ID, Delivery_Person, Discount_Code, Order_Address, Order_Postal_Code, Order_Time, Order_Price, Delivered) VALUES
+(1,1,1001,'123 Main St','10001','2025-01-01 18:00:00',25,1),
+(2,2,1002,'456 Park Ave','10002','2025-01-02 19:30:00',40,0),
+(3,3,NULL,'789 Broadway','10003','2025-01-03 20:00:00',30,1),
+(4,4,1004,'12 River Rd','10001','2025-01-04 18:45:00',22,1),
+(5,5,1005,'45 Hill St','10002','2025-01-05 21:15:00',28,0),
+(6,6,NULL,'78 Lake Ave','10003','2025-01-06 17:30:00',35,1),
+(7,7,1007,'90 Oak Ln','10001','2025-01-07 20:20:00',42,1),
+(8,8,1008,'22 Pine St','10002','2025-01-08 19:10:00',18,0),
+(9,9,1009,'34 Maple Dr','10003','2025-01-09 18:40:00',50,1),
+(10,10,1010,'56 Birch Blvd','10001','2025-01-10 21:00:00',60,1);
+
+-- ======================
+-- Order_Item (10 sample)
+-- ======================
+INSERT INTO Order_Item (Order_ID, Item_ID, Quantity) VALUES
+(1,1,2),(1,11,1),(2,3,1),(2,15,2),(3,5,1),(4,6,2),(5,7,1),(6,8,2),(7,9,1),(10,10,3);

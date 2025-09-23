@@ -4,11 +4,11 @@ DROP TABLE IF EXISTS Staff;
 DROP TABLE IF EXISTS `Order`;
 DROP TABLE IF EXISTS Drink;
 DROP TABLE IF EXISTS Dessert;
-DROP TABLE IF EXISTS Order_Extras;
+DROP TABLE IF EXISTS Menu_Item;
 DROP TABLE IF EXISTS Ingredient;
 DROP TABLE IF EXISTS Pizza;
 DROP TABLE IF EXISTS Pizza_Ingredient;
-DROP TABLE IF EXISTS Order_Pizza;
+DROP TABLE IF EXISTS Order_Item;
 
 CREATE TABLE Discount (
   `Discount_Code` BIGINT,
@@ -56,26 +56,22 @@ CREATE TABLE `Order` (
   );
 
 CREATE TABLE `Drink` (
-  `Drink_ID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `Drink_ID` INTEGER PRIMARY KEY,
   `Drink_Name` TEXT NOT NULL,
   `Drink_Price` DECIMAL(5,2) NOT NULL,
-  `18+` BOOLEAN NOT NULL
+  `18+` BOOLEAN NOT NULL,
+  FOREIGN KEY (Drink_ID) REFERENCES Menu_Item (Item_ID),
+  FOREIGN KEY (Drink_Name) REFERENCES Menu_Item (Item_ID),
+  FOREIGN KEY (Drink_Price) REFERENCES Menu_Item (Item_ID)
 );
 
 CREATE TABLE `Dessert` (
-  `Dessert_ID` INTEGER PRIMARY KEY AUTOINCREMENT ,
+  `Dessert_ID` INTEGER PRIMARY KEY,
   `Dessert_Name` TEXT NOT NULL,
-  `Dessert_Price` DECIMAL(5,2) NOT NULL
-);
-
-CREATE TABLE `Order_Extras` (
-  `Order_ID` BIGINT NOT NULL,
-  `Drink_ID` BIGINT NOT NULL,
-  `Dessert_ID` BIGINT NOT NULL,
-  `+18` BOOLEAN NOT NULL,
-  FOREIGN KEY(`Order_ID`) REFERENCES `Order` (`Order_ID`),
-  FOREIGN KEY (`Drink_ID`) REFERENCES `Drink`(`Drink_ID`),
-  FOREIGN KEY (`Dessert_ID`) REFERENCES `Dessert`(`Dessert_ID`)
+  `Dessert_Price` DECIMAL(5,2) NOT NULL,
+  FOREIGN KEY (`Dessert_ID`) REFERENCES  Menu_Item (Item_ID),
+  FOREIGN KEY (`Dessert_Name`) REFERENCES  Menu_Item (Item_Name),
+  FOREIGN KEY (`Dessert_Price`) REFERENCES  Menu_Item (Item_Price)
 );
 
 CREATE TABLE `Ingredient` (
@@ -87,11 +83,15 @@ CREATE TABLE `Ingredient` (
 );
 
 CREATE TABLE `Pizza` (
-  `Pizza_ID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `Pizza_ID` INTEGER PRIMARY KEY,
   `Pizza_Name` TEXT NOT NULL,
   `Vegetarian_Pizza` BOOLEAN NOT NULL,
   `Vegan_Pizza` BOOLEAN NOT NULL,
-  `Size` BOOLEAN NOT NULL
+  `Size` BOOLEAN NOT NULL,
+  Pizza_Price DECIMAL(5,2) NOT NULL,
+  FOREIGN KEY (Pizza_ID) REFERENCES Menu_Item(Item_ID),
+  FOREIGN KEY (Pizza_Name) REFERENCES Menu_Item(Item_Name),
+  FOREIGN KEY (Pizza_Price) REFERENCES Menu_Item(Item_Price)
 );
 
 CREATE TABLE `Pizza_Ingredient` (
@@ -101,13 +101,20 @@ CREATE TABLE `Pizza_Ingredient` (
   FOREIGN KEY (`Ingredient_ID`) REFERENCES `Ingredient` (`Ingredient_ID`)
 );
 
-CREATE TABLE `Order_Pizza` (
+CREATE TABLE `Order_Item` (
   `Order_ID` BIGINT NOT NULL,
-  `Pizza_ID` BIGINT NOT NULL,
+  `Item_ID` BIGINT NOT NULL,
   `Quantity` INT NOT NULL,
   FOREIGN KEY (`Order_ID`) REFERENCES `Order` (`Order_ID`),
-  FOREIGN KEY (`Pizza_ID`) REFERENCES `Pizza` (`Pizza_ID`)
+  FOREIGN KEY (`Item_ID`) REFERENCES `Menu_Item` (`Item_ID`)
 );
+
+CREATE TABLE `Menu_Item` (
+  `Item_ID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  Item_Name TEXT NOT NULL,
+  Item_Price DECIMAL(5,2) NOT NULL
+);
+
 
 
 
