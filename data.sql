@@ -85,16 +85,45 @@ INSERT INTO Ingredient (Ingredient_Name, Price, Vegetarian_Ingredient, Vegan_Ing
 -- Pizzas (10, reference Menu_Item)
 -- ======================
 INSERT INTO Pizza (Pizza_ID, Pizza_Name, Vegetarian_Pizza, Vegan_Pizza, Size, Pizza_Price) VALUES
-(1,'Margherita',1,0,1,8.50),(2,'Pepperoni',0,0,1,9.50),(3,'Hawaiian',0,0,1,10.00),
-(4,'BBQ Chicken',0,0,1,11.00),(5,'Veggie Supreme',1,1,1,9.00),(6,'Four Cheese',1,0,1,10.50),
-(7,'Meat Feast',0,0,1,12.00),(8,'Spicy Veggie',1,1,1,9.50),(9,'Seafood Special',0,0,1,13.00),
-(10,'Mushroom Delight',1,1,1,9.00);
+(1,'Margherita',null,null,1,8.50),(2,'Pepperoni',null,null,1,9.50),(3,'Hawaiian',null,null,1,10.00),
+(4,'BBQ Chicken',null,null,1,11.00),(5,'Veggie Supreme',null,null,1,9.00),(6,'Four Cheese',null,null,1,10.50),
+(7,'Meat Feast',null,null,1,12.00),(8,'Spicy Veggie',null,null,1,9.50),(9,'Seafood Special',null,null,1,13.00),
+(10,'Mushroom Delight',null,null,1,9.00);
 
 -- ======================
 -- Pizza_Ingredient (10 sample)
 -- ======================
 INSERT INTO Pizza_Ingredient (Pizza_ID, Ingredient_ID) VALUES
-(1,1),(1,2),(2,1),(2,3),(3,1),(3,4),(4,1),(4,5),(5,2),(5,6);
+-- Margherita
+(1,1),(1,2),
+
+-- Pepperoni
+(2,1),(2,2),(2,3),
+
+-- Hawaiian
+(3,1),(3,2),(3,4),
+
+-- BBQ Chicken
+(4,1),(4,2),(4,5),
+
+-- Veggie Supreme
+(5,1),(5,2),(5,6),(5,7),(5,8),(5,9),
+
+-- Four Cheese
+(6,1),(6,2),
+
+-- Meat Feast
+(7,1),(7,2),(7,3),(7,4),(7,5),
+
+-- Spicy Veggie
+(8,2),(8,6),(8,7),(8,8),(8,9),
+
+-- Seafood Special
+(9,1),(9,2),(9,10),
+
+-- Mushroom Delight
+(10,1),(10,2),(10,6);
+
 
 -- ======================
 -- Orders (10)

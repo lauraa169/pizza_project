@@ -85,8 +85,8 @@ CREATE TABLE `Ingredient` (
 CREATE TABLE `Pizza` (
   `Pizza_ID` INTEGER PRIMARY KEY,
   `Pizza_Name` TEXT NOT NULL,
-  `Vegetarian_Pizza` BOOLEAN NOT NULL,
-  `Vegan_Pizza` BOOLEAN NOT NULL,
+  `Vegetarian_Pizza` BOOLEAN,
+  `Vegan_Pizza` BOOLEAN,
   `Size` BOOLEAN NOT NULL,
   Pizza_Price DECIMAL(5,2) NOT NULL,
   FOREIGN KEY (Pizza_ID) REFERENCES Menu_Item(Item_ID),
