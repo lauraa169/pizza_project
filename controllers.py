@@ -72,6 +72,34 @@ def apply_discount(session, order_price: int, discount_code: int):
     session.commit()
     return order_price
 
+def loyalty_discount(session, customer_id: int, order_price: int):
+    customer = session.query(Customer).filter(Customer.Customer_ID == customer_id).one()
+    if customer.Pizzas_Ordered % 10:
+        print("You have received a loyalty discount!")
+        return order_price * 0.9
+    return order_price
+
+def birthday_discount(session, customer_id: int, order_id: int, order_price: int):
+    customer = session.query(Customer).filter(Customer.Customer_ID == customer_id).one()
+    today = date.today()
+
+    if customer.Birth_Date.day == today.day and customer.Birth_Date.month == today.month:
+        items = session.query(OrderItemLink).filter(OrderItemLink.Order_ID == order_id).all()
+
+        cheapest_pizza = 100
+        cheapest_drink = 100
+
+        for item in items:
+            if 0 < item.item_id <= 10:
+                cheapest_pizza = min(cheapest_pizza, item.Item_Price)
+            elif 10 < item.item_id <= 20:
+                cheapest_drink = min(cheapest_drink, item.Item_Price)
+
+        print("It's your Birthday! You received only the cheapest items for free as we need as much profit as possible.")
+        return order_price - cheapest_drink - cheapest_pizza
+
+    return order_price
+
 def checkout(session, order_id: int, discount_code: int):
     items = session.query(OrderItemLink).filter(OrderItemLink.Order_ID == order_id).all()
     order = session.query(Order).filter(Order.Order_ID == order_id).one()
