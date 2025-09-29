@@ -46,17 +46,18 @@ def calculate_price(session, pizza_id: int):
 
     return round(final_price, 2)
 
-def new_order(session, customer_id: int, discount_code: int, order_address: str, pizza_id: int,postal_code: str, order_price: int):
-    if discount_code is not None:
-        new_order_price = apply_discount(session, order_price, discount_code)
-    else:
-        new_order_price = order_price
-
+def new_order(session, customer_id: int,item_id: int, quantity: int, discount_code: int, order_address: str, postal_code: str, order_price: int):
     order = Order(Customer_ID=customer_id, Delivery_Person=1, Discount_Code=discount_code, Order_Address=order_address,
-              Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=new_order_price, Delivered=False)
-
+              Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=order_price, Delivered=False)
+    order_item(session, order.Order_ID, item_id, quantity)
     session.add(order)
     increase_pizzas_ordered(session, customer_id)
+    session.commit()
+    return order.Order_ID
+
+def order_item(session, order_id:int, item_id: int, quantity: int):
+    item_ordered = OrderItemLink(Order_ID=order_id, Item_ID=item_id, Quantity=quantity)
+    session.add(item_ordered)
     session.commit()
 
 def increase_pizzas_ordered(session, customer_id: int):
@@ -70,3 +71,10 @@ def apply_discount(session, order_price: int, discount_code: int):
         discount.Redeemed = True
     session.commit()
     return order_price
+
+def checkout(session, order_id: int, discount_code: int):
+    total_price = session.query(Order).filter(Order.Order_ID == order_id).one().Order_Price
+    if discount_code is not None:
+        new_order_price = apply_discount(session, total_price, discount_code)
+    else:
+        new_order_price = total_price
