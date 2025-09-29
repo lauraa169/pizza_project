@@ -46,4 +46,6 @@ def calculate_price(session, pizza_id: int):
 
     return round(final_price, 2)
 
+def new_order(session,customer_id: int, discount_code: int, order_address: str, pizza_id: int, ):
+
 

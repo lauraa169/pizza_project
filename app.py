@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from controllers import *
 from models import Base, seed_data, MenuItem, Pizza
 
-def display_menu_orm(session):
+def display_menu(session):
     pizzas = session.query(Pizza).order_by(Pizza.Pizza_ID).all()
     items = session.query(MenuItem).order_by(MenuItem.Item_ID).all()
 
@@ -49,6 +49,21 @@ def populate_vegetarian(session):
         p.Vegetarian_Pizza = is_vegetarian_pizza(session, p.Pizza_ID)
     session.commit()
 
+def welcome_message():
+    print("Welcome to Onsen Pizza!" +
+          "\nWith good pizza and even better coffee :)" +
+          "\nYou can use your keyboard to navigate the menu." +
+          "\nPress 1 to display the menu." +
+          "\nPress 2 to place an order." +
+          "\nPress 3 to create an account." +
+          "\nPress 4 to exit.")
+
+def place_order(session):
+    print("Please enter your order details:")
+    customer_id = int(input("Customer ID: "))
+    pizza_id = int(input("Pizza ID: "))
+    pizza_quantity = int(input("Pizza Quantity: "))
+
 def main():
     engine = create_engine("sqlite:///app.db", echo=False, future=True)
     Base.metadata.create_all(engine)
@@ -58,7 +73,7 @@ def main():
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
-        display_menu_orm(session)
+        display_menu(session)
 
 if __name__ == "__main__":
     main()
