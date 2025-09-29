@@ -1,7 +1,7 @@
 # README: 
 # Single CamelCase schema only. Removes Product/products and modern ecommerce layer.
 from datetime import datetime, date
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import SQLAlchemy
 from sqlalchemy import CheckConstraint
 
 from application import is_vegan
@@ -85,8 +85,6 @@ class Pizza(db.Model):
     Pizza_Name = db.Column(db.String, nullable=False)
     Vegetarian_Pizza = db.Column(db.Boolean)
     Vegan_Pizza = db.Column(db.Boolean)
-    Size = db.Column(db.Boolean, nullable=False)
-    Pizza_Price = db.Column(db.Numeric(5, 2), nullable=False)
 
     ingredients = db.relationship(
         "Ingredient",
@@ -201,16 +199,16 @@ def seed_data():
         db.session.add_all([Dessert(Dessert_ID=i, Dessert_Name=n, Dessert_Price=p) for (i, n, p) in desserts])
 
         pizzas = [
-            (1, "Margherita", None, is_vegan(1), True, 8.50),
-            (2, "Pepperoni", None, is_vegan(2), True, 9.50),
-            (3, "Hawaiian", None, is_vegan(3), True, 10.00),
-            (4, "BBQ Chicken", None, is_vegan(4), True, 11.00),
-            (5, "Veggie Supreme", None, is_vegan(5), True, 9.00),
-            (6, "Four Cheese", None, is_vegan(6), True, 10.50),
-            (7, "Meat Feast", None, is_vegan(7), True, 12.00),
-            (8, "Spicy Veggie", None, is_vegan(8), True, 9.50),
-            (9, "Seafood Special", None, is_vegan(9), True, 13.00),
-            (10, "Mushroom Delight", None, is_vegan(10), True, 9.00),
+            (1, "Margherita", None, None),
+            (2, "Pepperoni", None, None),
+            (3, "Hawaiian", None, None),
+            (4, "BBQ Chicken", None, None),
+            (5, "Veggie Supreme", None, None),
+            (6, "Four Cheese", None, None),
+            (7, "Meat Feast", None, None),
+            (8, "Spicy Veggie", None, None),
+            (9, "Seafood Special", None, None),
+            (10, "Mushroom Delight", None, None),
         ]
         db.session.add_all([
             Pizza(Pizza_ID=i, Pizza_Name=n, Vegetarian_Pizza=veg, Vegan_Pizza=vegan, Size=size, Pizza_Price=price)
