@@ -46,13 +46,13 @@ def calculate_price(session, pizza_id: int):
 
     return round(final_price, 2)
 
-def new_order(session, customer_id: int,item_id: int, quantity: int, discount_code: int, order_address: str, postal_code: str, order_price: int):
-    order = Order(Customer_ID=customer_id, Delivery_Person=1, Discount_Code=discount_code, Order_Address=order_address,
+def new_order(session, customer_id: int,item_id: int, quantity: int, order_address: str, postal_code: str, order_price: int):
+    order = Order(Customer_ID=customer_id, Delivery_Person=1, Order_Address=order_address,
               Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=order_price, Delivered=False)
-    order_item(session, order.Order_ID, item_id, quantity)
     session.add(order)
     increase_pizzas_ordered(session, customer_id)
     session.commit()
+    order_item(session, order.Order_ID, item_id, quantity)
     return order.Order_ID
 
 def order_item(session, order_id:int, item_id: int, quantity: int):
@@ -73,8 +73,19 @@ def apply_discount(session, order_price: int, discount_code: int):
     return order_price
 
 def checkout(session, order_id: int, discount_code: int):
-    total_price = session.query(Order).filter(Order.Order_ID == order_id).one().Order_Price
+    items = session.query(OrderItemLink).filter(OrderItemLink.Order_ID == order_id).all()
+    order = session.query(Order).filter(Order.Order_ID == order_id).one()
+    price = 0
+    for item in items:
+        if 0 < item.item_id <= 10:
+            price += (calculate_price(session,item.item_id) * item.Quantity)
+        else:
+            price += (item.Item_price * item.Quantity)
     if discount_code is not None:
-        new_order_price = apply_discount(session, total_price, discount_code)
+        order.Discount_Code = discount_code
+        total_price = apply_discount(session, price, discount_code)
     else:
-        new_order_price = total_price
+        total_price = price
+    print(f"Total price: {total_price}" +
+          "\nThank you for your order!" +
+          "\nWe hope to see you again soon!")

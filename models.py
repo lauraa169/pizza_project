@@ -77,7 +77,7 @@ class MenuItem(Base):
     __tablename__ = "Menu_Item"
     Item_ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     Item_Name: Mapped[str] = mapped_column(String, nullable=False)
-    Item_Price: Mapped[Numeric] = mapped_column(Numeric(5, 2), nullable=False)
+    Item_Price: Mapped[Numeric] = mapped_column(Numeric(5, 2), nullable=True)
 
 
 class Drink(Base):
@@ -186,9 +186,9 @@ def seed_data(session: Session) -> None:
     if session.query(MenuItem).count() == 0:
         menu_items = [
             # Pizzas (IDs 1..10)
-            ("Margherita", 8.50), ("Pepperoni", 9.50), ("Hawaiian", 10.00), ("BBQ Chicken", 11.00),
-            ("Veggie Supreme", 9.00), ("Four Cheese", 10.50), ("Meat Feast", 12.00), ("Spicy Veggie", 9.50),
-            ("Seafood Special", 13.00), ("Mushroom Delight", 9.00),
+            ("Margherita", None), ("Pepperoni", None), ("Hawaiian", None), ("BBQ Chicken", None),
+            ("Veggie Supreme", None), ("Four Cheese", None), ("Meat Feast", None), ("Spicy Veggie", None),
+            ("Seafood Special", None), ("Mushroom Delight", None),
             # Drinks (IDs 11..20)
             ("Cola", 2.50), ("Orange Juice", 3.00), ("Lemonade", 2.20), ("Iced Tea", 2.80),
             ("Beer", 4.00), ("Red Wine", 5.50), ("Water", 1.50), ("Energy Drink", 3.50),

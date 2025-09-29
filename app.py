@@ -88,7 +88,7 @@ def place_order(session):
     order_address = input("Order Address: ")
     postal_code = input("Order Postal Code: ")
     order_price = calculate_price(session, pizza_id) * pizza_quantity
-    order_id = new_order(session, customer_id, order_address, pizza_id, postal_code, order_price)
+    order_id = new_order(session, customer_id, pizza_id, pizza_quantity, order_address, postal_code, order_price)
     answer = int(input("Would you like to order another pizza?" +
           "\nPress 1 for yes or 2 for no."))
     if answer == 1:
@@ -106,8 +106,14 @@ def order_extra_item(session, order_id: int):
     if answer == 1:
         order_extra_item(session, order_id)
     elif answer == 2:
-        return
+        checkout_page(session, order_id)
     session.commit()
+
+def checkout_page(session, order_id: int):
+    discount_code = int(input("Discount code (optional): "))
+    checkout(session, order_id, discount_code)
+    print(f"\nCheckout complete!")
+    continue_message(session)
 
 def main():
     engine = create_engine("sqlite:///app.db", echo=False, future=True)
