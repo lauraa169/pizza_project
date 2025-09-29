@@ -21,7 +21,7 @@ def display_menu_orm(session):
         vegan_badge = " (vegan)" if bool(pi.Vegan_Pizza) else ""
         vegetarian_badge = " (vegetarian)" if bool(pi.Vegetarian_Pizza) else "" #TODO
         pizza_price = # calculate price
-        print(f"{pi.Pizza_ID} | {pi.Pizza_Name}{vegan_badge} {vegetarian_badge}.......... {pizza_price}")
+        print(f"{pi.Pizza_ID} | {pi.Pizza_Name}{vegan_badge}{vegetarian_badge}.......... {pizza_price}")
 
     print("Pizzas:")
     for pi in pizzas:

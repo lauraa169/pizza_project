@@ -4,7 +4,7 @@ from sqlalchemy.orm import selectinload
 from models import *
 
 def is_vegan_pizza(session, pizza_id: int) -> bool:
-    # Join Pizza_Ingredient -> Ingredient and check if any ingredient is non-vegan
+    # joins Pizza_Ingredient -> Ingredient and check if any ingredient is non-vegan
     non_vegan_exists = (
         session.query(Ingredient)
         .join(PizzaIngredient, Ingredient.Ingredient_ID == PizzaIngredient.c.Ingredient_ID)
