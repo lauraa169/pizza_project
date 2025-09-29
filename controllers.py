@@ -64,7 +64,7 @@ def increase_pizzas_ordered(session, customer_id: int):
     customer = session.query(Customer).filter(Customer.Customer_ID == customer_id).one()
     customer.Pizzas_Ordered += 1
 
-def apply_discount(session, order_price: int, discount_code: int):
+def apply_discount(session, order_price: int, discount_code):
     discount = session.query(Discount).filter(Discount.Discount_Code == discount_code).one()
     if discount.Redeemed is False:
         order_price -= (order_price * discount.Percent) / 100
@@ -74,7 +74,7 @@ def apply_discount(session, order_price: int, discount_code: int):
 
 def loyalty_discount(session, customer_id: int, order_price: int):
     customer = session.query(Customer).filter(Customer.Customer_ID == customer_id).one()
-    if customer.Pizzas_Ordered % 10:
+    if customer.Pizzas_Ordered > 0 and customer.Pizzas_Ordered % 10 == 0:
         print("You have received a loyalty discount!")
         return order_price * 0.9
     return order_price
@@ -105,8 +105,8 @@ def checkout(session, order_id: int, discount_code: int):
     order = session.query(Order).filter(Order.Order_ID == order_id).one()
     price = 0
     for item in items:
-        if 0 < item.item_id <= 10:
-            price += (calculate_price(session,item.item_id) * item.Quantity)
+        if 0 < item.Item_ID <= 10:
+            price += (calculate_price(session,item.Item_ID) * item.Quantity)
         else:
             price += (item.Item_price * item.Quantity)
     if discount_code is not None:
@@ -114,6 +114,10 @@ def checkout(session, order_id: int, discount_code: int):
         total_price = apply_discount(session, price, discount_code)
     else:
         total_price = price
+
+    total_price = birthday_discount(session, order.Customer_ID, order_id,
+                                    (loyalty_discount(session, order.Customer_ID, total_price)))
+
     print(f"Total price: {total_price}" +
           "\nThank you for your order!" +
           "\nWe hope to see you again soon!")

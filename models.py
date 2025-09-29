@@ -157,6 +157,7 @@ class OrderItemLink(Base):
 def seed_data(session: Session) -> None:
     if session.query(Discount).count() == 0:
         session.add_all([
+            Discount(Discount_Code=1000, Percent=0, Redeemed=False),
             Discount(Discount_Code=1001, Percent=10, Redeemed=False),
             Discount(Discount_Code=1002, Percent=15, Redeemed=True),
             Discount(Discount_Code=1003, Percent=20, Redeemed=False),

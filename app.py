@@ -93,6 +93,8 @@ def place_order(session):
           "\nPress 1 for yes or 2 for no."))
     if answer == 1:
         order_extra_item(session, order_id)
+    elif answer == 2:
+        checkout_page(session, order_id)
     print(f"\nOrder placed successfully! Your total price is: {order_price}")
     continue_message(session)
 
@@ -110,8 +112,22 @@ def order_extra_item(session, order_id: int):
     session.commit()
 
 def checkout_page(session, order_id: int):
-    discount_code = int(input("Discount code (optional): "))
-    checkout(session, order_id, discount_code)
+    valid_codes = {row[0] for row in session.query(Discount.Discount_Code).all()}
+    discount_code_raw = input("Discount code (optional): ").strip()
+
+    discount_code: int | None = None
+    if discount_code_raw:
+        if discount_code_raw.isdigit():
+            candidate = int(discount_code_raw)
+            if candidate in valid_codes:
+                discount_code = candidate
+
+    # Fallback to a known "no discount" code if it exists in DB, else None
+    if discount_code is None:
+        checkout(session, order_id, None)
+    else:
+        checkout(session, order_id, discount_code)
+
     print(f"\nCheckout complete!")
     continue_message(session)
 
