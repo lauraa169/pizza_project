@@ -37,6 +37,8 @@ def display_menu(session):
     for mi in items[20:30]:
         line_item(mi)
 
+    continue_message(session)
+
 def populate_vegan(session):
     pizzas = session.query(Pizza).all()
     for p in pizzas:
@@ -49,31 +51,51 @@ def populate_vegetarian(session):
         p.Vegetarian_Pizza = is_vegetarian_pizza(session, p.Pizza_ID)
     session.commit()
 
-def welcome_message():
+def start(session):
     print("Welcome to Onsen Pizza!" +
-          "\nWith good pizza and even better coffee :)" +
-          "\nYou can use your keyboard to navigate the menu." +
-          "\nPress 1 to display the menu." +
-          "\nPress 2 to place an order." +
-          "\nPress 3 to create an account." +
-          "\nPress 4 to exit.")
+          "\nWith good pizza and even better coffee :)")
+    customer_input(session)
+
+def continue_message(session):
+    print("\n ------------------------------------------------")
+    answer = str(input("\nWould you like to continue (y/n)? "))
+    if answer == "y":
+        customer_input(session)
+    elif answer == 'n':
+        exit(0)
+    else:
+        print("Please use the correct input.")
+        continue_message(session)
+
+def customer_input(session):
+        print("\n ------------------------------------------------" +
+        "\n| Press 1 to display the menu.                   |" +
+        "\n| Press 2 to place an order.                     |" +
+        "\n| Press 3 to create an account.                  |" +
+        "\n| Press 4 to exit.                               |" +
+        "\n ------------------------------------------------")
+        answer = int(input("\nWhat would you like to do? "))
+        if answer == 1:
+            display_menu(session)
+        elif answer == 2:
+            place_order(session)
 
 def place_order(session):
-    print("Please enter your order details:")
+    print("\nPlease enter your order details.")
     customer_id = int(input("Customer ID: "))
-    pizza_id = int(input("Pizza ID: "))
+    pizza_id = int(input("Pizza ID (1 - 10): "))
     pizza_quantity = int(input("Pizza Quantity: "))
 
 def main():
     engine = create_engine("sqlite:///app.db", echo=False, future=True)
     Base.metadata.create_all(engine)
-    session = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+    Session = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 
-    with session() as session:
+    with Session() as session:
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
-        display_menu(session)
+        start(session)
 
 if __name__ == "__main__":
     main()
