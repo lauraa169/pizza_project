@@ -2,7 +2,7 @@
 # such as displaying menu, placing orders(??), etc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from controllers import is_vegan_pizza
+from controllers import *
 from models import Base, seed_data, MenuItem, Pizza
 
 def display_menu_orm(session):
@@ -19,9 +19,9 @@ def display_menu_orm(session):
 
     def line_pizza(pi):
         vegan_badge = " (vegan)" if bool(pi.Vegan_Pizza) else ""
-        vegetarian_badge = " (vegetarian)" if bool(pi.Vegetarian_Pizza) else "" #TODO
-        pizza_price = # calculate price
-        print(f"{pi.Pizza_ID} | {pi.Pizza_Name}{vegan_badge}{vegetarian_badge}.......... {pizza_price}")
+        vegetarian_badge = " (vegetarian)" if bool(pi.Vegetarian_Pizza) else ""
+
+        print(f"{pi.Pizza_ID} | {pi.Pizza_Name}{vegan_badge}{vegetarian_badge}.......... {calculate_price(session, pi.Pizza_ID)}")
 
     print("Pizzas:")
     for pi in pizzas:
@@ -43,16 +43,22 @@ def populate_vegan(session):
         p.Vegan_Pizza = is_vegan_pizza(session, p.Pizza_ID)
     session.commit()
 
+def populate_vegetarian(session):
+    pizzas = session.query(Pizza).all()
+    for p in pizzas:
+        p.Vegetarian_Pizza = is_vegetarian_pizza(session, p.Pizza_ID)
+    session.commit()
+
 def main():
     engine = create_engine("sqlite:///app.db", echo=False, future=True)
     Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+    session = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 
-    with Session() as session:
+    with session() as session:
         seed_data(session)
         populate_vegan(session)
+        populate_vegetarian(session)
         display_menu_orm(session)
 
 if __name__ == "__main__":
     main()
-
