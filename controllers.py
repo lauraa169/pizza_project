@@ -46,6 +46,27 @@ def calculate_price(session, pizza_id: int):
 
     return round(final_price, 2)
 
-def new_order(session,customer_id: int, discount_code: int, order_address: str, pizza_id: int, ):
+def new_order(session, customer_id: int, discount_code: int, order_address: str, pizza_id: int,postal_code: str, order_price: int):
+    if discount_code is not None:
+        new_order_price = apply_discount(session, order_price, discount_code)
+    else:
+        new_order_price = order_price
 
+    order = Order(Customer_ID=customer_id, Delivery_Person=1, Discount_Code=discount_code, Order_Address=order_address,
+              Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=new_order_price, Delivered=False)
 
+    session.add(order)
+    increase_pizzas_ordered(session, customer_id)
+    session.commit()
+
+def increase_pizzas_ordered(session, customer_id: int):
+    customer = session.query(Customer).filter(Customer.Customer_ID == customer_id).one()
+    customer.Pizzas_Ordered += 1
+
+def apply_discount(session, order_price: int, discount_code: int):
+    discount = session.query(Discount).filter(Discount.Discount_Code == discount_code).one()
+    if discount.Redeemed is False:
+        order_price -= (order_price * discount.Percent) / 100
+        discount.Redeemed = True
+    session.commit()
+    return order_price
