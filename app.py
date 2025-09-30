@@ -137,6 +137,8 @@ def main():
     Session = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 
     with Session() as session:
+        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
