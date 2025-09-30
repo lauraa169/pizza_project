@@ -65,6 +65,7 @@ def assign_driver(session, postal_code: str):
     drivers = session.query(Staff).filter(Staff.Postal_Code == postal_code).all()
     for driver in drivers:
         if driver.Availability is True:
+            session.query(Staff).filter(Staff.Staff_ID == driver.Staff_ID).update({"Availability": False})
             return driver.Staff_ID
     return None
 
