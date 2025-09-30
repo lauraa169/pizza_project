@@ -95,6 +95,8 @@ def birthday_discount(session, customer_id: int, order_id: int, order_price: int
             elif 10 < item.item_id <= 20:
                 cheapest_drink = min(cheapest_drink, item.Item_Price)
 
+        if cheapest_drink == 100: cheapest_drink = 0
+
         print("It's your Birthday! You received only the cheapest items for free as we need as much profit as possible.")
         return order_price - cheapest_drink - cheapest_pizza
 
