@@ -1,7 +1,9 @@
 # README:
 # Declarative SQLAlchemy 2.x models with a plain Declarative Base (no Flask-SQLAlchemy)
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+from sqlalchemy.orm import Mapped
+from sqlalchemy import DateTime
 from typing import List
 
 from sqlalchemy import (
@@ -68,10 +70,12 @@ class Staff(Base):
     Bank_Account: Mapped[str] = mapped_column(String, nullable=False)
     Liscence: Mapped[int] = mapped_column(Integer, nullable=False)
     Postal_Code: Mapped[str] = mapped_column(String, nullable=False)
-    Availability: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    Busy_Until: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
     deliveries: Mapped[List["Order"]] = relationship(back_populates="delivery_person")
 
+    def Availability(self) -> bool:
+        return self.Busy_Until < datetime.now()
 
 class MenuItem(Base):
     __tablename__ = "Menu_Item"
@@ -304,25 +308,25 @@ def seed_data(session: Session) -> None:
 
         drivers = [
             {"Name": "John", "Surname": "Doe", "Bank_Account": "BA1001", "Liscence": 12345,
-             "Postal_Code": postal_codes[0], "Availability": False},
+             "Postal_Code": postal_codes[0], "Busy_Until": datetime.now() - timedelta(minutes=5)},
             {"Name": "Jane", "Surname": "Smith", "Bank_Account": "BA1002", "Liscence": 12346,
-             "Postal_Code": postal_codes[0], "Availability": False},
+             "Postal_Code": postal_codes[0], "Busy_Until": datetime.now() - timedelta(minutes=5)},
             {"Name": "Alice", "Surname": "Brown", "Bank_Account": "BA1003", "Liscence": 12347,
-             "Postal_Code": postal_codes[0], "Availability": False},
+             "Postal_Code": postal_codes[0], "Busy_Until": datetime.now() - timedelta(minutes=5)},
 
             {"Name": "Bob", "Surname": "Johnson", "Bank_Account": "BA1004", "Liscence": 12348,
-             "Postal_Code": postal_codes[1], "Availability": True},
+             "Postal_Code": postal_codes[1], "Busy_Until": datetime.now() - timedelta(minutes=5)},
             {"Name": "Emily", "Surname": "Davis", "Bank_Account": "BA1005", "Liscence": 12349,
-             "Postal_Code": postal_codes[1], "Availability": True},
+             "Postal_Code": postal_codes[1], "Busy_Until": datetime.now() - timedelta(minutes=5)},
             {"Name": "Chris", "Surname": "Wilson", "Bank_Account": "BA1006", "Liscence": 12350,
-             "Postal_Code": postal_codes[1], "Availability": True},
+             "Postal_Code": postal_codes[1], "Busy_Until": datetime.now() - timedelta(minutes=5)},
 
             {"Name": "Sophia", "Surname": "Martinez", "Bank_Account": "BA1007", "Liscence": 12351,
-             "Postal_Code": postal_codes[2], "Availability": True},
+             "Postal_Code": postal_codes[2], "Busy_Until": datetime.now() - timedelta(minutes=5)},
             {"Name": "Liam", "Surname": "Anderson", "Bank_Account": "BA1008", "Liscence": 12352,
-             "Postal_Code": postal_codes[2], "Availability": True},
+             "Postal_Code": postal_codes[2], "Busy_Until": datetime.now() - timedelta(minutes=5)},
             {"Name": "Olivia", "Surname": "Taylor", "Bank_Account": "BA1009", "Liscence": 12353,
-             "Postal_Code": postal_codes[2], "Availability": True},
+             "Postal_Code": postal_codes[2], "Busy_Until": datetime.now() - timedelta(minutes=5)},
         ]
         staff_objects = [Staff(**driver) for driver in drivers]
 

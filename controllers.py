@@ -2,6 +2,7 @@
 # such as how we define vegan and vegetarian pizzas, how we calculate prices, etc.
 from sqlalchemy.orm import selectinload
 from models import *
+from datetime import datetime, date, timedelta
 
 def is_vegan_pizza(session, pizza_id: int) -> bool:
     # joins Pizza_Ingredient -> Ingredient and check if any ingredient is non-vegan
@@ -64,8 +65,8 @@ def new_order(session, customer_id: int,item_id: int, quantity: int, order_addre
 def assign_driver(session, postal_code: str):
     drivers = session.query(Staff).filter(Staff.Postal_Code == postal_code).all()
     for driver in drivers:
-        if driver.Availability is True:
-            session.query(Staff).filter(Staff.Staff_ID == driver.Staff_ID).update({"Availability": False})
+        if driver.Availability() is True:
+            session.query(Staff).filter(Staff.Staff_ID == driver.Staff_ID).update({"Busy_Until": datetime.now() + timedelta(minutes=30)})
             return driver.Staff_ID
     return None
 
