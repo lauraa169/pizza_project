@@ -47,13 +47,25 @@ def calculate_price(session, pizza_id: int):
     return round(final_price, 2)
 
 def new_order(session, customer_id: int,item_id: int, quantity: int, order_address: str, postal_code: str, order_price: int):
-    order = Order(Customer_ID=customer_id, Delivery_Person=1, Order_Address=order_address,
+    driver = assign_driver(session, postal_code)
+    if driver is None:
+        print("There is currently no delivery driver available. Please restart the session and try again later :)")
+        exit()
+
+    order = Order(Customer_ID=customer_id, Delivery_Person=driver, Order_Address=order_address,
               Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=order_price, Delivered=False)
     session.add(order)
     increase_pizzas_ordered(session, customer_id)
     session.commit()
     order_item(session, order.Order_ID, item_id, quantity)
     return order.Order_ID
+
+def assign_driver(session, postal_code: str):
+    drivers = session.query(Staff).filter(Staff.Postal_Code == postal_code).all()
+    for driver in drivers:
+        if driver.Availability:
+            return driver.Staff_ID
+    return None
 
 def order_item(session, order_id:int, item_id: int, quantity: int):
     item_ordered = OrderItemLink(Order_ID=order_id, Item_ID=item_id, Quantity=quantity)
