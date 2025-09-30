@@ -299,4 +299,36 @@ def seed_data(session: Session) -> None:
             OrderItemLink(Order_ID=10, Item_ID=10, Quantity=3),
         ])
 
+    if session.query(Staff).count() == 0:
+        postal_codes = ["10001", "10002", "10003"]
+
+        drivers = [
+            {"Name": "John", "Surname": "Doe", "Bank_Account": "BA1001", "Liscence": 12345,
+             "Postal_Code": postal_codes[0], "Availability": True},
+            {"Name": "Jane", "Surname": "Smith", "Bank_Account": "BA1002", "Liscence": 12346,
+             "Postal_Code": postal_codes[0], "Availability": True},
+            {"Name": "Alice", "Surname": "Brown", "Bank_Account": "BA1003", "Liscence": 12347,
+             "Postal_Code": postal_codes[0], "Availability": True},
+
+            {"Name": "Bob", "Surname": "Johnson", "Bank_Account": "BA1004", "Liscence": 12348,
+             "Postal_Code": postal_codes[1], "Availability": True},
+            {"Name": "Emily", "Surname": "Davis", "Bank_Account": "BA1005", "Liscence": 12349,
+             "Postal_Code": postal_codes[1], "Availability": True},
+            {"Name": "Chris", "Surname": "Wilson", "Bank_Account": "BA1006", "Liscence": 12350,
+             "Postal_Code": postal_codes[1], "Availability": True},
+
+            {"Name": "Sophia", "Surname": "Martinez", "Bank_Account": "BA1007", "Liscence": 12351,
+             "Postal_Code": postal_codes[2], "Availability": True},
+            {"Name": "Liam", "Surname": "Anderson", "Bank_Account": "BA1008", "Liscence": 12352,
+             "Postal_Code": postal_codes[2], "Availability": True},
+            {"Name": "Olivia", "Surname": "Taylor", "Bank_Account": "BA1009", "Liscence": 12353,
+             "Postal_Code": postal_codes[2], "Availability": True},
+        ]
+
+        # Create Staff objects
+        staff_objects = [Staff(**driver) for driver in drivers]
+
+        # Add all to session
+        session.add_all(staff_objects)
+
     session.commit()
