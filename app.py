@@ -89,8 +89,8 @@ def place_order(session):
     postal_code = input("Order Postal Code: ")
     order_price = calculate_price(session, pizza_id) * pizza_quantity
     order_id = new_order(session, customer_id, pizza_id, pizza_quantity, order_address, postal_code, order_price)
-    answer = int(input("Would you like to order another pizza?" +
-          "\nPress 1 for yes or 2 for no."))
+    answer = int(input("Would you like to order another item?" +
+          "\nPress 1 for yes or 2 for no. "))
     if answer == 1:
         order_extra_item(session, order_id)
     elif answer == 2:
@@ -99,12 +99,12 @@ def place_order(session):
     continue_message(session)
 
 def order_extra_item(session, order_id: int):
-    item_id = int(input("Enter the number of the item you want to order:"))
-    quantity = int(input("How many would you like to order?"))
+    item_id = int(input("Enter the number of the item you want to order: "))
+    quantity = int(input("How many would you like to order? "))
     order_item(session, order_id, item_id, quantity)
     print(f"\nItem ordered successfully!")
-    answer = int(input("Would you like to order another pizza?" +
-                       "\nPress 1 for yes or 2 for no."))
+    answer = int(input("Would you like to order another item?" +
+                       "\nPress 1 for yes or 2 for no. "))
     if answer == 1:
         order_extra_item(session, order_id)
     elif answer == 2:

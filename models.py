@@ -176,7 +176,7 @@ def seed_data(session: Session) -> None:
 
     if session.query(Customer).count() == 0:
         session.add_all([
-            Customer(Customer_Name='John',  Customer_Surname='Doe',      Birth_Date=date(1990,5,15), Customer_Address='123 Main St',  Customer_Postal_Code='10001', Credit_Card=1234567890123456, Customer_Email='john@example.com',  Phone_Number=1112223333, Pizzas_Ordered=5),
+            Customer(Customer_Name='John',  Customer_Surname='Doe',      Birth_Date=date(1990,9,30), Customer_Address='123 Main St',  Customer_Postal_Code='10001', Credit_Card=1234567890123456, Customer_Email='john@example.com',  Phone_Number=1112223333, Pizzas_Ordered=5),
             Customer(Customer_Name='Jane',  Customer_Surname='Smith',    Birth_Date=date(1985,8,22), Customer_Address='456 Park Ave', Customer_Postal_Code='10002', Credit_Card=9876543210987654, Customer_Email='jane@example.com',  Phone_Number=2223334444, Pizzas_Ordered=3),
             Customer(Customer_Name='Alice', Customer_Surname='Brown',    Birth_Date=date(2000,1,10), Customer_Address='789 Broadway', Customer_Postal_Code='10003', Credit_Card=1111222233334444, Customer_Email='alice@example.com', Phone_Number=3334445555, Pizzas_Ordered=7),
             Customer(Customer_Name='Bob',   Customer_Surname='Johnson',  Birth_Date=date(1992,3,18), Customer_Address='12 River Rd',  Customer_Postal_Code='10001', Credit_Card=5555444433332222, Customer_Email='bob@example.com',   Phone_Number=4445556666, Pizzas_Ordered=2),

@@ -100,15 +100,15 @@ def birthday_discount(session, customer_id: int, order_id: int, order_price: int
 
     if customer.Birth_Date.day == today.day and customer.Birth_Date.month == today.month:
         items = session.query(OrderItemLink).filter(OrderItemLink.Order_ID == order_id).all()
-
         cheapest_pizza = 100
         cheapest_drink = 100
 
         for item in items:
-            if 0 < item.item_id <= 10:
-                cheapest_pizza = min(cheapest_pizza, item.Item_Price)
-            elif 10 < item.item_id <= 20:
-                cheapest_drink = min(cheapest_drink, item.Item_Price)
+            if 0 < item.Item_ID <= 10:
+                cheapest_pizza = min(cheapest_pizza, calculate_price(session, item.Item_ID))
+            elif 10 < item.Item_ID <= 20:
+                price = session.query(MenuItem).filter(item.Item_ID == MenuItem.Item_ID).one()
+                cheapest_drink = min(cheapest_drink, price[2])
 
         if cheapest_drink == 100: cheapest_drink = 0
 
@@ -125,7 +125,7 @@ def checkout(session, order_id: int, discount_code: int):
         if 0 < item.Item_ID <= 10:
             price += (calculate_price(session,item.Item_ID) * item.Quantity)
         else:
-            price += (item.Item_price * item.Quantity)
+            price += (item.Item_Price * item.Quantity)
     if discount_code is not None:
         order.Discount_Code = discount_code
         total_price = apply_discount(session, price, discount_code)
@@ -135,6 +135,6 @@ def checkout(session, order_id: int, discount_code: int):
     total_price = birthday_discount(session, order.Customer_ID, order_id,
                                     (loyalty_discount(session, order.Customer_ID, total_price)))
 
-    print(f"Total price: {total_price}" +
+    print(f"Total price: {round(total_price, 2)}" +
           "\nThank you for your order!" +
           "\nWe hope to see you again soon!")
