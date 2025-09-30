@@ -52,6 +52,7 @@ def new_order(session, customer_id: int,item_id: int, quantity: int, order_addre
         print("There is currently no delivery driver available. Please restart the session and try again later :)")
         exit()
 
+
     order = Order(Customer_ID=customer_id, Delivery_Person=driver, Order_Address=order_address,
               Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=order_price, Delivered=False)
     session.add(order)
@@ -63,7 +64,7 @@ def new_order(session, customer_id: int,item_id: int, quantity: int, order_addre
 def assign_driver(session, postal_code: str):
     drivers = session.query(Staff).filter(Staff.Postal_Code == postal_code).all()
     for driver in drivers:
-        if driver.Availability:
+        if driver.Availability is True:
             return driver.Staff_ID
     return None
 
