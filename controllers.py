@@ -1,6 +1,8 @@
 # README: this file contains all the business logic for the app
 # such as how we define vegan and vegetarian pizzas, how we calculate prices, etc.
 from sqlalchemy.orm import selectinload
+
+from app import no_driver_available
 from models import *
 from datetime import datetime, date, timedelta
 
@@ -50,17 +52,25 @@ def calculate_price(session, pizza_id: int):
 def new_order(session, customer_id: int,item_id: int, quantity: int, order_address: str, postal_code: str, order_price: int):
     driver = assign_driver(session, postal_code)
     if driver is None:
-        print("There is currently no delivery driver available. Please restart the session and try again later :)")
-        exit()
+        # keeps track of orders that dont go through for analytical purposes (report)
+        undelivered_order(session, customer_id, order_address, postal_code, order_price)
+        # calls no driver available interface
+        no_driver_available(session)
 
 
     order = Order(Customer_ID=customer_id, Delivery_Person=driver, Order_Address=order_address,
-              Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=order_price, Delivered=False)
+              Order_Postal_Code=postal_code, Order_Time=datetime.now(), Order_Price=order_price, Delivered=True)
     session.add(order)
     increase_pizzas_ordered(session, customer_id)
     session.commit()
     order_item(session, order.Order_ID, item_id, quantity)
     return order.Order_ID
+
+def undelivered_order(session, customer_id: int, order_address: str, postal_code: str, order_price: int):
+    undeliveredOrder = Undelivered_Order(Customer_ID=customer_id, UOrder_Address=order_address, UOrder_Postal_Code=postal_code,UOrder_Time=datetime.now(), UOrder_Price=order_price )
+    session.add(undeliveredOrder)
+    session.commit()
+    return undeliveredOrder.UOrder_ID
 
 def assign_driver(session, postal_code: str):
     drivers = session.query(Staff).filter(Staff.Postal_Code == postal_code).all()

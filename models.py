@@ -59,6 +59,7 @@ class Customer(Base):
     Phone_Number: Mapped[int] = mapped_column(BigInteger, nullable=False)
     Pizzas_Ordered: Mapped[int] = mapped_column(Integer, nullable=False)
 
+    uorders: Mapped[List["Undelivered_Order"]] = relationship(back_populates="customer")
     orders: Mapped[List["Order"]] = relationship(back_populates="customer")
 
 
@@ -146,6 +147,17 @@ class Order(Base):
         back_populates="order", cascade="all, delete-orphan"
     )
 
+class Undelivered_Order(Base):
+    __tablename__ = "Undelivered_Order"
+    UOrder_ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    Customer_ID: Mapped[int] = mapped_column(ForeignKey("Customer.Customer_ID"), nullable=False)
+    Discount_Code: Mapped[int | None] = mapped_column(ForeignKey("Discount.Discount_Code"))
+    UOrder_Address: Mapped[str] = mapped_column(String, nullable=False)
+    UOrder_Postal_Code: Mapped[str] = mapped_column(String, nullable=False)
+    UOrder_Time: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    UOrder_Price: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+    customer: Mapped[Customer] = relationship(back_populates="uorders")
 
 class OrderItemLink(Base):
     __tablename__ = "Order_Item"

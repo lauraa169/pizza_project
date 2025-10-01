@@ -131,12 +131,18 @@ def checkout_page(session, order_id: int):
     print(f"\nCheckout complete!")
     continue_message(session)
 
+def no_driver_available(session):
+    print("There is currently no delivery driver available. Please restart the session and try again later :)")
+    exit()
+
 def main():
     engine = create_engine("sqlite:///app.db", echo=False, future=True)
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 
     with Session() as session:
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
