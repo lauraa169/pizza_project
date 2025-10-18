@@ -5,7 +5,7 @@ from sqlalchemy.orm import selectinload
 from app import no_driver_available
 from models import *
 from datetime import datetime, date, timedelta
-from sqlalchemy import func
+from sqlalchemy import func, extract
 
 def get_pizzas(session):
     pizzas = session.query(Pizza).order_by(Pizza.Pizza_ID).all()
@@ -198,3 +198,33 @@ def check_undelivered_orders(session):
     else:
         for item in undelivered:
             print(item)
+
+def monthly_earnings_postal(session, postal_code):
+    results = (
+        session.query(
+            Staff.Staff_ID,
+            Staff.Name,
+            Staff.Surname,
+            extract('year', Order.Order_Time).label('year'),
+            extract('month', Order.Order_Time).label('month'),
+            func.sum(Order.Order_Price).label('total_earnings')
+        )
+        .join(Order, Order.Delivery_Person == Staff.Staff_ID)
+        .filter(
+            Staff.Postal_Code == postal_code,
+            Order.Delivered.is_(True)
+        )
+        .group_by(Staff.Staff_ID, Staff.Name, Staff.Surname, 'year', 'month')
+        .order_by(Staff.Staff_ID, 'year', 'month')
+        .all()
+    )
+
+    if not results:
+        print(f"No delivered orders found for postal code {postal_code}.")
+        return []
+
+    print(f"\nMonthly earnings by staff for postal code {postal_code}:")
+    for sid, name, surname, year, month, earnings in results:
+        print(f"  {name} {surname} (ID: {sid}) - {int(year)}-{int(month):02d}: ${float(earnings):.2f}")
+
+    return results
