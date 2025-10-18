@@ -9,7 +9,7 @@ def display_menu(session):
     pizzas = get_pizzas(session)
     items = get_items(session)
 
-    print("Menu Items:")
+    print("\n1Menu Items:")
     print("----------")
     print("ID | Name | Price")
     print("----------")
@@ -40,8 +40,33 @@ def display_menu(session):
     continue_message(session)
 
 def start(session):
-    print("Welcome to Onsen Pizza!" +
-          "\nWith good pizza and even better coffee :)")
+    print('''
+                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                  
+PPPPPPPPPPPPPPPPP                                                            lllllll  lllllll                                      iiii        PPPPPPPPPPPPPPPPP     iiii                                                      
+P::::::::::::::::P                                                           l:::::l  l:::::l                                     i::::i       P::::::::::::::::P   i::::i                                                     
+P::::::PPPPPP:::::P                                                          l:::::l  l:::::l                                      iiii        P::::::PPPPPP:::::P   iiii                                                      
+PP:::::P     P:::::P                                                         l:::::l  l:::::l                                                  PP:::::P     P:::::P                                                            
+  P::::P     P:::::P  eeeeeeeeeeee    ppppp   ppppppppp       eeeeeeeeeeee    l::::l   l::::l    ooooooooooo   nnnn  nnnnnnnn    iiiiiii         P::::P     P:::::Piiiiiii zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz  aaaaaaaaaaaaa   
+  P::::P     P:::::Pee::::::::::::ee  p::::ppp:::::::::p    ee::::::::::::ee  l::::l   l::::l  oo:::::::::::oo n:::nn::::::::nn  i:::::i         P::::P     P:::::Pi:::::i z:::::::::::::::zz:::::::::::::::z  a::::::::::::a  
+  P::::PPPPPP:::::Pe::::::eeeee:::::eep:::::::::::::::::p  e::::::eeeee:::::eel::::l   l::::l o:::::::::::::::on::::::::::::::nn  i::::i         P::::PPPPPP:::::P  i::::i z::::::::::::::z z::::::::::::::z   aaaaaaaaa:::::a 
+  P:::::::::::::PPe::::::e     e:::::epp::::::ppppp::::::pe::::::e     e:::::el::::l   l::::l o:::::ooooo:::::onn:::::::::::::::n i::::i         P:::::::::::::PP   i::::i zzzzzzzz::::::z  zzzzzzzz::::::z             a::::a 
+  P::::PPPPPPPPP  e:::::::eeeee::::::e p:::::p     p:::::pe:::::::eeeee::::::el::::l   l::::l o::::o     o::::o  n:::::nnnn:::::n i::::i         P::::PPPPPPPPP     i::::i       z::::::z         z::::::z       aaaaaaa:::::a 
+  P::::P          e:::::::::::::::::e  p:::::p     p:::::pe:::::::::::::::::e l::::l   l::::l o::::o     o::::o  n::::n    n::::n i::::i         P::::P             i::::i      z::::::z         z::::::z      aa::::::::::::a 
+  P::::P          e::::::eeeeeeeeeee   p:::::p     p:::::pe::::::eeeeeeeeeee  l::::l   l::::l o::::o     o::::o  n::::n    n::::n i::::i         P::::P             i::::i     z::::::z         z::::::z      a::::aaaa::::::a 
+  P::::P          e:::::::e            p:::::p    p::::::pe:::::::e           l::::l   l::::l o::::o     o::::o  n::::n    n::::n i::::i         P::::P             i::::i    z::::::z         z::::::z      a::::a    a:::::a 
+PP::::::PP        e::::::::e           p:::::ppppp:::::::pe::::::::e         l::::::l l::::::lo:::::ooooo:::::o  n::::n    n::::ni::::::i      PP::::::P           i::::::i  z::::::zzzzzzzz  z::::::zzzzzzzza::::a    a:::::a 
+P::::::::P         e::::::::eeeeeeee   p::::::::::::::::p  e::::::::eeeeeeee l::::::l l::::::lo:::::::::::::::o  n::::n    n::::ni::::::i      P::::::::P          i::::::i z::::::::::::::z z::::::::::::::za:::::aaaa::::::a 
+P::::::::P          ee:::::::::::::e   p::::::::::::::pp    ee:::::::::::::e l::::::l l::::::l oo:::::::::::oo   n::::n    n::::ni::::::i      P::::::::P          i::::::iz:::::::::::::::zz:::::::::::::::z a::::::::::aa:::a
+PPPPPPPPPP            eeeeeeeeeeeeee   p::::::pppppppp        eeeeeeeeeeeeee llllllll llllllll   ooooooooooo     nnnnnn    nnnnnniiiiiiii      PPPPPPPPPP          iiiiiiiizzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz  aaaaaaaaaa  aaaa
+                                       p:::::p                                                                                                                                                                                    
+                                       p:::::p                                                                                                                                                                                    
+                                      p:::::::p                                                                                                                                                                                   
+                                      p:::::::p                                                                                                                                                                                   
+                                      p:::::::p                                                                                                                                                                                   
+                                      ppppppppp                                                                                                                                                                                   
+                                                                                                                                                                                                                                  
+    ''')
     customer_input(session)
 
 def continue_message(session):
@@ -73,7 +98,6 @@ def customer_input(session):
             exit(0)
 
 def staff_input(session):
-    print("\nWhat would you like to do?")
     print("\n ------------------------------------------------" +
           "\n| Press 1 to see monthly earnings by gender.     |" +
           "\n| Press 2 to see monthly earnings by postal code.|" +
@@ -84,6 +108,7 @@ def staff_input(session):
     if answer == 1:
         year = int(input("Enter the year: "))
         month = int(input("Enter the month (1-12): "))
+        print("")
         print(monthly_earnings_gender(session, year, month))
         staff_input(session)
     elif answer == 2:
@@ -91,6 +116,7 @@ def staff_input(session):
         staff_input(session)
     elif answer == 3:
         print(monthly_earnings_age(session, int(input("Enter the year: ")), int(input("Enter the month (1-12): "))))
+        print("")
         staff_input(session)
     elif answer == 4:
         start(session)
@@ -102,7 +128,6 @@ def staff_login(session):
         print("\nWelcome to the staff panel!")
         staff_input(session)
 
-
 def place_order(session):
     print("\nPlease enter your order details.")
     customer_id = int(input("Customer ID: "))
@@ -112,11 +137,10 @@ def place_order(session):
     postal_code = input("Order Postal Code: ")
     order_price = calculate_price(session, pizza_id) * pizza_quantity
     order_id = new_order(session, customer_id, pizza_id, pizza_quantity, order_address, postal_code, order_price)
-    answer = int(input("Would you like to order another item?" +
-          "\nPress 1 for yes or 2 for no. "))
-    if answer == 1:
+    answer = str(input("\nWould you like to order another item (y/n)? " ))
+    if answer == "y":
         order_extra_item(session, order_id)
-    elif answer == 2:
+    elif answer == "n":
         checkout_page(session, order_id)
     print(f"\nOrder placed successfully! Your total price is: {order_price}")
     continue_message(session)
@@ -125,12 +149,11 @@ def order_extra_item(session, order_id: int):
     item_id = int(input("Enter the number of the item you want to order: "))
     quantity = int(input("How many would you like to order? "))
     order_item(session, order_id, item_id, quantity)
-    print(f"\nItem ordered successfully!")
-    answer = int(input("Would you like to order another item?" +
-                       "\nPress 1 for yes or 2 for no. "))
-    if answer == 1:
+    # print(f"Item ordered successfully!")
+    answer = str(input("\nWould you like to order another item (y/n)? "))
+    if answer == "y":
         order_extra_item(session, order_id)
-    elif answer == 2:
+    elif answer == "n":
         checkout_page(session, order_id)
     session.commit()
 
@@ -151,7 +174,7 @@ def checkout_page(session, order_id: int):
     else:
         checkout(session, order_id, discount_code)
 
-    print(f"\nCheckout complete!")
+    # print(f"Checkout complete!")
     continue_message(session)
 
 def no_driver_available(session):
@@ -169,7 +192,6 @@ def main():
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
-        print(monthly_earnings_gender(session, 2025, 1))
         start(session)
 
 if __name__ == "__main__":

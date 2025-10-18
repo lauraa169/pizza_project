@@ -78,7 +78,7 @@ def calculate_price(session, pizza_id: int):
 
 def new_order(session, customer_id: int,item_id: int, quantity: int, order_address: str, postal_code: str, order_price: int):
     with session.begin_nested():
-        valid_postal_codes = {10001, 10002, 10003}
+        valid_postal_codes = {'10001', '10002', '10003'}
         if postal_code not in valid_postal_codes:
             raise ValueError("Invalid postal code. We only deliver to postal codes 10001, 10002, and 10003. Please, try a local pizzeria :)")
         driver = assign_driver(session, postal_code)
@@ -183,7 +183,7 @@ def checkout(session, order_id: int, discount_code: int):
         total_price = birthday_discount(session, order.Customer_ID, order_id,
                                         (loyalty_discount(session, order.Customer_ID, total_price)))
 
-        print(f"Total price: {round(total_price, 2)}" +
+        print(f"\nTotal price: {round(total_price, 2)}" +
               "\nThank you for your order!" +
               "\nWe hope to see you again soon!")
 
