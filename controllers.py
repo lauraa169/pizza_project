@@ -152,9 +152,6 @@ def birthday_discount(session, customer_id: int, order_id: int, order_price: int
 
     return order_price
 
-def check_undelivered_orders(session):
-    undelivered = session.query(Undelivered_Order).all()
-
 def checkout(session, order_id: int, discount_code: int):
     items = session.query(OrderItemLink).filter(OrderItemLink.Order_ID == order_id).all()
     order = session.query(Order).filter(Order.Order_ID == order_id).one()
@@ -193,3 +190,11 @@ def top3pizzas (session):
 
     # Close the session
     session.close()
+
+def check_undelivered_orders(session):
+    undelivered = session.query(Undelivered_Order).all()
+    if not undelivered:
+        print("No undelivered orders!")
+    else:
+        for item in undelivered:
+            print(item)
