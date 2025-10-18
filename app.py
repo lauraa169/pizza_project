@@ -6,8 +6,8 @@ from controllers import *
 from models import Base, seed_data, MenuItem, Pizza
 
 def display_menu(session):
-    pizzas = session.query(Pizza).order_by(Pizza.Pizza_ID).all()
-    items = session.query(MenuItem).order_by(MenuItem.Item_ID).all()
+    pizzas = get_pizzas(session)
+    items = get_items(session)
 
     print("Menu Items:")
     print("----------")
@@ -38,18 +38,6 @@ def display_menu(session):
         line_item(mi)
 
     continue_message(session)
-
-def populate_vegan(session):
-    pizzas = session.query(Pizza).all()
-    for p in pizzas:
-        p.Vegan_Pizza = is_vegan_pizza(session, p.Pizza_ID)
-    session.commit()
-
-def populate_vegetarian(session):
-    pizzas = session.query(Pizza).all()
-    for p in pizzas:
-        p.Vegetarian_Pizza = is_vegetarian_pizza(session, p.Pizza_ID)
-    session.commit()
 
 def start(session):
     print("Welcome to Onsen Pizza!" +
@@ -112,7 +100,7 @@ def order_extra_item(session, order_id: int):
     session.commit()
 
 def checkout_page(session, order_id: int):
-    valid_codes = {row[0] for row in session.query(Discount.Discount_Code).all()}
+    valid_codes = get_valid_codes(session)
     discount_code_raw = input("Discount code (optional): ").strip()
 
     discount_code: int | None = None

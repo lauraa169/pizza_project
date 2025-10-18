@@ -6,6 +6,30 @@ from app import no_driver_available
 from models import *
 from datetime import datetime, date, timedelta
 
+def get_pizzas(session):
+    pizzas = session.query(Pizza).order_by(Pizza.Pizza_ID).all()
+    return pizzas
+
+def get_items(session):
+    items = session.query(MenuItem).order_by(MenuItem.Item_ID).all()
+    return items
+
+def get_valid_codes(session):
+    valid_codes = {row[0] for row in session.query(Discount.Discount_Code).all()}
+    return valid_codes
+
+def populate_vegan(session):
+    pizzas = get_pizzas(session)
+    for p in pizzas:
+        p.Vegan_Pizza = is_vegan_pizza(session, p.Pizza_ID)
+    session.commit()
+
+def populate_vegetarian(session):
+    pizzas = get_pizzas(session)
+    for p in pizzas:
+        p.Vegetarian_Pizza = is_vegetarian_pizza(session, p.Pizza_ID)
+    session.commit()
+
 def is_vegan_pizza(session, pizza_id: int) -> bool:
     # joins Pizza_Ingredient -> Ingredient and check if any ingredient is non-vegan
     non_vegan_exists = (
@@ -126,6 +150,9 @@ def birthday_discount(session, customer_id: int, order_id: int, order_price: int
         return order_price - cheapest_drink - cheapest_pizza
 
     return order_price
+
+def check_undelivered_orders(session):
+    undelivered = session.query(Undelivered_Order).all()
 
 def checkout(session, order_id: int, discount_code: int):
     items = session.query(OrderItemLink).filter(OrderItemLink.Order_ID == order_id).all()
