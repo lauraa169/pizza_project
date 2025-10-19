@@ -46,7 +46,6 @@ class Discount(Base):
         CheckConstraint("Percent >= 0 AND Percent <= 100", name="ck_discount_percent_range"),
     )
 
-
 class Customer(Base):
     __tablename__ = "Customer"
     Customer_ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -146,7 +145,6 @@ class Ingredient(Base):
         CheckConstraint("Price >= 0", name="ck_ingredient_price_positive"),
     )
 
-
 class Pizza(Base):
     __tablename__ = "Pizza"
     Pizza_ID: Mapped[int] = mapped_column(ForeignKey("Menu_Item.Item_ID"), primary_key=True)
@@ -159,7 +157,6 @@ class Pizza(Base):
         back_populates="pizzas",
         lazy="selectin",
     )
-
 
 class Order(Base):
     __tablename__ = "Order"

@@ -275,3 +275,32 @@ def monthly_earnings_age(session, year: int, month: int):
 def check_password(session, password):
     Realpassword = "TomPepelsIsTheBest"
     return Realpassword == password
+
+def new_pizza(session, ingredient1, ingredient2, ingredient3):
+    ing_list = [ingredient1, ingredient2, ingredient3]
+    ingredients = session.query(Ingredient).filter(Ingredient.Ingredient_ID.in_(ing_list)).all()
+    ingredient_names = [ing.Ingredient_Name for ing in ingredients]
+    name = " + ".join(ingredient_names)
+
+    new_menu_item = MenuItem(Item_Name=name)
+    session.add(new_menu_item)
+    session.flush()
+
+    new_pizza = Pizza(Pizza_ID=new_menu_item.Item_ID, Pizza_Name=name)
+    session.add(new_pizza)
+    session.flush()
+
+    session.execute(
+        PizzaIngredient.insert(),
+        [{"Pizza_ID": new_pizza.Pizza_ID, "Ingredient_ID": ing_id} for ing_id in ing_list]
+    )
+
+    new_pizza.Vegan_Pizza = is_vegan_pizza(session, new_pizza.Pizza_ID)
+    new_pizza.Vegetarian_Pizza = is_vegetarian_pizza(session, new_pizza.Pizza_ID)
+    new_menu_item.Item_Price = calculate_price(session, new_pizza.Pizza_ID)
+
+    session.commit()
+    print(f"\nPizza '{name}' added successfully with ID {new_pizza.Pizza_ID}")
+
+
+

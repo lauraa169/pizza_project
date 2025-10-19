@@ -102,7 +102,8 @@ def staff_input(session):
           "\n| Press 1 to see monthly earnings by gender.     |" +
           "\n| Press 2 to see monthly earnings by postal code.|" +
           "\n| Press 3 to see monthly earnings by age group.  |" +
-          "\n| Press 4 to exit.                               |" +
+          "\n| Press 4 to test the application.               |" +
+          "\n| Press 5 to exit.                               |" +
           "\n ------------------------------------------------")
     answer = int(input("\nWhat would you like to do? "))
     if answer == 1:
@@ -118,7 +119,9 @@ def staff_input(session):
         print(monthly_earnings_age(session, int(input("Enter the year: ")), int(input("Enter the month (1-12): "))))
         print("")
         staff_input(session)
-    elif answer == 4:
+    elif answer ==4:
+        testing(session)
+    elif answer == 5:
         start(session)
 
 def staff_login(session):
@@ -180,6 +183,23 @@ def checkout_page(session, order_id: int):
 def no_driver_available(session):
     print("There is currently no delivery driver available. Please restart the session and try again later :)")
     exit()
+
+def testing(session):
+    print("\nWelcome to the testing panel!")
+    print("\n ------------------------------------------------" +
+          "\n| Press 1 to test pizza labeling.                |" +
+          "\n| Press 2 to exit.                               |" +
+          "\n ------------------------------------------------")
+
+    answer = int(input("\nWhat would you like to do? "))
+    if answer == 1:
+        ingredient1 = str(input("Ingredient 1: "))
+        ingredient2 = str(input("Ingredient 2: "))
+        ingredient3 = str(input("Ingredient 3: "))
+        new_pizza(session, ingredient1, ingredient2, ingredient3)
+        display_menu(session)
+    elif answer == 2:
+        start(session)
 
 def main():
     engine = create_engine("sqlite:///app.db", echo=False, future=True)
