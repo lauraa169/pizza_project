@@ -59,7 +59,7 @@ def customer_input(session):
         print("\n ------------------------------------------------" +
         "\n| Press 1 to display the menu.                   |" +
         "\n| Press 2 to place an order.                     |" +
-        "\n| Press 3 to create an account.                  |" +
+        "\n| Press 3 for staff login.                       |" +
         "\n| Press 4 to exit.                               |" +
         "\n ------------------------------------------------")
         answer = int(input("\nWhat would you like to do? "))
@@ -67,6 +67,11 @@ def customer_input(session):
             display_menu(session)
         elif answer == 2:
             place_order(session)
+        elif answer == 3:
+            staff_login(session)
+
+def staff_login(session):
+    print("\nPlease enteer you staff credentials:")
 
 def place_order(session):
     print("\nPlease enter your order details.")
@@ -134,7 +139,6 @@ def main():
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
-        print(monthly_earnings_age(session, 2025, 1))
         start(session)
 
 if __name__ == "__main__":

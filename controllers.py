@@ -77,6 +77,9 @@ def calculate_price(session, pizza_id: int):
 
 def new_order(session, customer_id: int,item_id: int, quantity: int, order_address: str, postal_code: str, order_price: int):
     with session.begin_nested():
+        valid_postal_codes = {10001, 10002, 10003}
+        if postal_code not in valid_postal_codes:
+            raise ValueError("Invalid postal code. We only deliver to postal codes 10001, 10002, and 10003. Please, try a local pizzeria :)")
         driver = assign_driver(session, postal_code)
         if driver is None:
             # keeps track of orders that dont go through for analytical purposes (report)
