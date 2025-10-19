@@ -5,7 +5,8 @@ from sqlalchemy.orm import selectinload
 from app import no_driver_available
 from models import *
 from datetime import datetime, date, timedelta
-from sqlalchemy import func, extract
+from sqlalchemy import func, extract, case, and_
+
 
 def get_pizzas(session):
     pizzas = session.query(Pizza).order_by(Pizza.Pizza_ID).all()
@@ -238,3 +239,23 @@ def monthly_earnings_postal(session, postal_code):
         print(f"  {name} {surname} (ID: {sid}) - {int(year)}-{int(month):02d}: ${float(earnings):.2f}")
 
     return results
+
+def monthly_earnings_age(session, year: int, month: int):
+    age_group_case = case(
+        (and_(Staff.Age >= 16, Staff.Age <= 21), "16 to 21"),
+        (and_(Staff.Age >= 22, Staff.Age <= 40), "22 to 40"),
+        (Staff.Age > 40, "40+"),
+        else_="Unknown"  # Fallback for ages outside defined ranges (e.g., <16)
+    ).label("age_group")  # Assign a label to the computed column
+
+    earnings_by_age_group = session.query(
+        age_group_case,  # Select the computed age group label
+        func.sum(Order.Order_Price).label('total_monthly_earnings')
+    ).join(Order, Staff.Staff_ID == Order.Delivery_Person) \
+        .filter(func.strftime("%Y", Order.Order_Time) == str(year)) \
+        .filter(func.strftime("%m", Order.Order_Time) == f"{month:02d}") \
+        .group_by(age_group_case) \
+        .order_by(age_group_case) \
+        .all()
+
+    return earnings_by_age_group
