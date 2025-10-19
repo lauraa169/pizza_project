@@ -41,6 +41,7 @@ class Discount(Base):
     Percent: Mapped[int] = mapped_column(Integer, nullable=False)
     Redeemed: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
+    # check constraint to ensure Percent is between 0 and 100
     __table_args__ = (
         CheckConstraint("Percent >= 0 AND Percent <= 100", name="ck_discount_percent_range"),
     )
@@ -62,6 +63,11 @@ class Customer(Base):
     uorders: Mapped[List["Undelivered_Order"]] = relationship(back_populates="customer")
     orders: Mapped[List["Order"]] = relationship(back_populates="customer")
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Pizzas_Ordered >= 0", name="ck_customer_pizzas_ordered_positive"),
+        CheckConstraint("Birth_Date < CURRENT_DATE", name="ck_customer_birth_date_past"),
+    )
 
 class Staff(Base):
     __tablename__ = "Staff"
@@ -77,8 +83,15 @@ class Staff(Base):
 
     deliveries: Mapped[List["Order"]] = relationship(back_populates="delivery_person")
 
+    # function to check if a driver is available
     def Availability(self) -> bool:
         return self.Busy_Until < datetime.now()
+
+    #check constraints
+    __table_args__ = (
+        CheckConstraint("Age >= 16", name="ck_staff_age_min"),
+        CheckConstraint("Gender IN ('Male', 'Female')", name="ck_staff_gender_enum"),
+    )
 
 class MenuItem(Base):
     __tablename__ = "Menu_Item"
@@ -86,6 +99,10 @@ class MenuItem(Base):
     Item_Name: Mapped[str] = mapped_column(String, nullable=False)
     Item_Price: Mapped[Numeric] = mapped_column(Numeric(5, 2), nullable=True)
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Item_Price >= 0", name="ck_menu_item_price_positive"),
+    )
 
 class Drink(Base):
     __tablename__ = "Drink"
@@ -94,6 +111,10 @@ class Drink(Base):
     Drink_Price: Mapped[Numeric] = mapped_column(Numeric(5, 2), nullable=False)
     is_18_plus: Mapped[bool] = mapped_column("18+", Boolean, nullable=False)
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Drink_Price >= 0", name="ck_drink_price_positive"),
+    )
 
 class Dessert(Base):
     __tablename__ = "Dessert"
@@ -101,6 +122,10 @@ class Dessert(Base):
     Dessert_Name: Mapped[str] = mapped_column(String, nullable=False)
     Dessert_Price: Mapped[Numeric] = mapped_column(Numeric(5, 2), nullable=False)
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Dessert_Price >= 0", name="ck_dessert_price_positive"),
+    )
 
 class Ingredient(Base):
     __tablename__ = "Ingredient"
@@ -114,6 +139,11 @@ class Ingredient(Base):
         secondary=PizzaIngredient,
         back_populates="ingredients",
         lazy="selectin",
+    )
+
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Price >= 0", name="ck_ingredient_price_positive"),
     )
 
 
@@ -149,6 +179,11 @@ class Order(Base):
         back_populates="order", cascade="all, delete-orphan"
     )
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Order_Price >= 0", name="ck_order_price_positive"),
+    )
+
 class Undelivered_Order(Base):
     __tablename__ = "Undelivered_Order"
     UOrder_ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -161,6 +196,11 @@ class Undelivered_Order(Base):
 
     customer: Mapped[Customer] = relationship(back_populates="uorders")
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("UOrder_Price >= 0", name="ck_undelivered_order_price_positive"),
+    )
+
 class OrderItemLink(Base):
     __tablename__ = "Order_Item"
     Order_ID: Mapped[int] = mapped_column(ForeignKey("Order.Order_ID"), primary_key=True)
@@ -170,6 +210,10 @@ class OrderItemLink(Base):
     order: Mapped[Order] = relationship(back_populates="items")
     menu_item: Mapped[MenuItem] = relationship()
 
+    # check constraints
+    __table_args__ = (
+        CheckConstraint("Quantity > 0", name="ck_order_item_quantity_positive"),
+    )
 
 # Seed function rewritten to use a provided Session
 def seed_data(session: Session) -> None:

@@ -120,6 +120,8 @@ def apply_discount(session, order_price: int, discount_code):
     if discount.Redeemed is False:
         order_price -= (order_price * discount.Percent) / 100
         discount.Redeemed = True
+    else:
+        print("Sorry! this discount code has already been redeemed.")
     session.commit()
     return order_price
 
