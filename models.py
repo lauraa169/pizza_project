@@ -149,8 +149,8 @@ class Pizza(Base):
     __tablename__ = "Pizza"
     Pizza_ID: Mapped[int] = mapped_column(ForeignKey("Menu_Item.Item_ID"), primary_key=True)
     Pizza_Name: Mapped[str] = mapped_column(String, nullable=False)
-    Vegetarian_Pizza: Mapped[bool | None] = mapped_column(Boolean, nullable=False)
-    Vegan_Pizza: Mapped[bool | None] = mapped_column(Boolean, nullable=False)
+    Vegetarian_Pizza: Mapped[bool | None] = mapped_column(Boolean)
+    Vegan_Pizza: Mapped[bool | None] = mapped_column(Boolean)
 
     ingredients: Mapped[List[Ingredient]] = relationship(
         secondary=PizzaIngredient,
