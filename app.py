@@ -69,9 +69,39 @@ def customer_input(session):
             place_order(session)
         elif answer == 3:
             staff_login(session)
+        elif answer == 4:
+            exit(0)
+
+def staff_input(session):
+    print("\nWhat would you like to do?")
+    print("\n ------------------------------------------------" +
+          "\n| Press 1 to see monthly earnings by gender.     |" +
+          "\n| Press 2 to see monthly earnings by postal code.|" +
+          "\n| Press 3 to see monthly earnings by age group.  |" +
+          "\n| Press 4 to exit.                               |" +
+          "\n ------------------------------------------------")
+    answer = int(input("\nWhat would you like to do? "))
+    if answer == 1:
+        year = int(input("Enter the year: "))
+        month = int(input("Enter the month (1-12): "))
+        print(monthly_earnings_gender(session, year, month))
+        staff_input(session)
+    elif answer == 2:
+        monthly_earnings_postal(session, input("Enter the postal code: "))
+        staff_input(session)
+    elif answer == 3:
+        print(monthly_earnings_age(session, int(input("Enter the year: ")), int(input("Enter the month (1-12): "))))
+        staff_input(session)
+    elif answer == 4:
+        start(session)
 
 def staff_login(session):
-    print("\nPlease enteer you staff credentials:")
+    print("\nPlease enter the password to login as a staff member.")
+    password = input("Password: ")
+    if check_password(session, password):
+        print("\nWelcome to the staff panel!")
+        staff_input(session)
+
 
 def place_order(session):
     print("\nPlease enter your order details.")
@@ -139,6 +169,7 @@ def main():
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
+        print(monthly_earnings_gender(session, 2025, 1))
         start(session)
 
 if __name__ == "__main__":

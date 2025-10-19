@@ -1,6 +1,7 @@
 # README: this file contains all the business logic for the app
 # such as how we define vegan and vegetarian pizzas, how we calculate prices, etc.
 from sqlalchemy.orm import selectinload
+from sqlalchemy.testing.pickleable import User
 
 from app import no_driver_available
 from models import *
@@ -213,11 +214,11 @@ def monthly_earnings_gender(session, year: int, month: int):
         Staff.Gender,
         func.sum(Order.Order_Price).label('total_monthly_earnings')
     ).join(Order, Staff.Staff_ID == Order.Delivery_Person) \
-    .filter(func.strftime("%Y", Order.Order_Time) == str(year)) \
-    .filter(func.strftime("%m", Order.Order_Time) == f"{month:02d}") \
-    .group_by(Staff.Gender) \
-    .order_by(func.sum(Order.Order_Price).desc()) \
-    .all()
+        .filter(extract('year', Order.Order_Time) == year) \
+        .filter(extract('month', Order.Order_Time) == month) \
+        .group_by(Staff.Gender) \
+        .order_by(func.sum(Order.Order_Price).desc()) \
+        .all()
 
     return monthly_earnings
 
@@ -270,3 +271,7 @@ def monthly_earnings_age(session, year: int, month: int):
         .all()
 
     return earnings_by_age_group
+
+def check_password(session, password):
+    Realpassword = "TomPepelsIsTheBest"
+    return Realpassword == password
