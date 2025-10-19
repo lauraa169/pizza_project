@@ -188,9 +188,6 @@ def top3pizzas (session):
     for pizza_name, quantity in top_pizzas:
         print(f"- {pizza_name}: {quantity} units sold")
 
-    # Close the session
-    session.close()
-
 def check_undelivered_orders(session):
     undelivered = session.query(Undelivered_Order).all()
     if not undelivered:
@@ -198,6 +195,19 @@ def check_undelivered_orders(session):
     else:
         for item in undelivered:
             print(item)
+
+def monthly_earnings_gender(session, year: int, month: int):
+    monthly_earnings = session.query(
+        Staff.Gender,
+        func.sum(Order.Order_Price).label('total_monthly_earnings')
+    ).join(Order, Staff.Staff_ID == Order.Delivery_Person) \
+    .filter(func.strftime("%Y", Order.Order_Time) == str(year)) \
+    .filter(func.strftime("%m", Order.Order_Time) == f"{month:02d}") \
+    .group_by(Staff.Gender) \
+    .order_by(func.sum(Order.Order_Price).desc()) \
+    .all()
+
+    return monthly_earnings
 
 def monthly_earnings_postal(session, postal_code):
     results = (

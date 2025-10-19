@@ -68,6 +68,7 @@ class Staff(Base):
     Staff_ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     Name: Mapped[str] = mapped_column(String, nullable=False)
     Surname: Mapped[str] = mapped_column(String, nullable=False)
+    Gender: Mapped[str] = mapped_column(String, nullable=False)
     Bank_Account: Mapped[str] = mapped_column(String, nullable=False)
     Liscence: Mapped[int] = mapped_column(Integer, nullable=False)
     Postal_Code: Mapped[str] = mapped_column(String, nullable=False)
@@ -319,25 +320,25 @@ def seed_data(session: Session) -> None:
         postal_codes = ["10001", "10002", "10003"]
 
         drivers = [
-            {"Name": "John", "Surname": "Doe", "Bank_Account": "BA1001", "Liscence": 12345,
+            {"Name": "John", "Surname": "Doe", "Gender": "Male", "Bank_Account": "BA1001", "Liscence": 12345,
              "Postal_Code": postal_codes[0], "Busy_Until": datetime.now() - timedelta(minutes=5)},
-            {"Name": "Jane", "Surname": "Smith", "Bank_Account": "BA1002", "Liscence": 12346,
+            {"Name": "Jane", "Surname": "Smith", "Gender": "Female", "Bank_Account": "BA1002", "Liscence": 12346,
              "Postal_Code": postal_codes[0], "Busy_Until": datetime.now() - timedelta(minutes=5)},
-            {"Name": "Alice", "Surname": "Brown", "Bank_Account": "BA1003", "Liscence": 12347,
+            {"Name": "Alice", "Surname": "Brown", "Gender": "Female", "Bank_Account": "BA1003", "Liscence": 12347,
              "Postal_Code": postal_codes[0], "Busy_Until": datetime.now() - timedelta(minutes=5)},
 
-            {"Name": "Bob", "Surname": "Johnson", "Bank_Account": "BA1004", "Liscence": 12348,
+            {"Name": "Bob", "Surname": "Johnson", "Gender": "Male", "Bank_Account": "BA1004", "Liscence": 12348,
              "Postal_Code": postal_codes[1], "Busy_Until": datetime.now() - timedelta(minutes=5)},
-            {"Name": "Emily", "Surname": "Davis", "Bank_Account": "BA1005", "Liscence": 12349,
+            {"Name": "Emily", "Surname": "Davis", "Gender": "Female", "Bank_Account": "BA1005", "Liscence": 12349,
              "Postal_Code": postal_codes[1], "Busy_Until": datetime.now() - timedelta(minutes=5)},
-            {"Name": "Chris", "Surname": "Wilson", "Bank_Account": "BA1006", "Liscence": 12350,
+            {"Name": "Chris", "Surname": "Wilson", "Gender": "Male", "Bank_Account": "BA1006", "Liscence": 12350,
              "Postal_Code": postal_codes[1], "Busy_Until": datetime.now() - timedelta(minutes=5)},
 
-            {"Name": "Sophia", "Surname": "Martinez", "Bank_Account": "BA1007", "Liscence": 12351,
+            {"Name": "Sophia", "Surname": "Martinez", "Gender": "Female", "Bank_Account": "BA1007", "Liscence": 12351,
              "Postal_Code": postal_codes[2], "Busy_Until": datetime.now() - timedelta(minutes=5)},
-            {"Name": "Liam", "Surname": "Anderson", "Bank_Account": "BA1008", "Liscence": 12352,
+            {"Name": "Liam", "Surname": "Anderson", "Gender": "Male", "Bank_Account": "BA1008", "Liscence": 12352,
              "Postal_Code": postal_codes[2], "Busy_Until": datetime.now() - timedelta(minutes=5)},
-            {"Name": "Olivia", "Surname": "Taylor", "Bank_Account": "BA1009", "Liscence": 12353,
+            {"Name": "Olivia", "Surname": "Taylor", "Gender": "Female", "Bank_Account": "BA1009", "Liscence": 12353,
              "Postal_Code": postal_codes[2], "Busy_Until": datetime.now() - timedelta(minutes=5)},
         ]
         staff_objects = [Staff(**driver) for driver in drivers]

@@ -134,6 +134,7 @@ def main():
         seed_data(session)
         populate_vegan(session)
         populate_vegetarian(session)
+        print(monthly_earnings_gender(session, 2025, 1))
         start(session)
 
 if __name__ == "__main__":
