@@ -5,6 +5,7 @@ from sqlalchemy.orm import selectinload
 from app import no_driver_available
 from models import *
 from datetime import datetime, date, timedelta
+from sqlalchemy import func
 
 def get_pizzas(session):
     pizzas = session.query(Pizza).order_by(Pizza.Pizza_ID).all()
@@ -175,3 +176,20 @@ def checkout(session, order_id: int, discount_code: int):
     print(f"Total price: {round(total_price, 2)}" +
           "\nThank you for your order!" +
           "\nWe hope to see you again soon!")
+
+def top3pizzas (session):
+    top_pizzas = session.query(
+        Pizza.Pizza_Name,
+        func.sum(OrderItemLink.Quantity).label('total_sold')
+    ).join(OrderItemLink, Pizza.Pizza_ID == OrderItemLink.Item_ID) \
+        .group_by(Pizza.Pizza_Name) \
+        .order_by(func.sum(OrderItemLink.Quantity).desc()) \
+        .limit(3) \
+        .all()
+
+    print("Top 3 Selling Pizzas:")
+    for pizza_name, quantity in top_pizzas:
+        print(f"- {pizza_name}: {quantity} units sold")
+
+    # Close the session
+    session.close()
